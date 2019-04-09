@@ -9,6 +9,15 @@
 
 /*
 **	LEM_IN
+**
+**		lem_in		1
+**		nodes[]		2
+**		nodes		4
+**		nodes->list	8
+**		nodes->name	16
+**
+**
+**
 */
 
 typedef struct	s_node
@@ -27,8 +36,9 @@ typedef struct	s_lem_in
 	t_node	*nodes[];
 }				t_lem_in;
 
-t_lem_in    	*get_nodes(void);
-void    		free_all(t_lem_in *lem_in, int ap);
+t_lem_in    	*get_nodes();
+void    		*free_all(t_lem_in *lem_in, t_node *list, int ap);
+t_node			*free_node(t_node **node, char *line, int ap);
 
 
 /*

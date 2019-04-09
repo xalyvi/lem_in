@@ -1,13 +1,34 @@
 #include "lem_in.h"
 
-void    free_all(t_lem_in *lem_in, int ap)
+void    *free_all(t_lem_in *lem_in, t_node *list, int ap)
 {
-	size_t i;
+	t_node	*tmp;
 
-	i = -1;
-	if (ap)
-		while ((lem_in->nodes)[++i] != 0)
-			free(lem_in->nodes[i]->list);
-	free(lem_in->nodes);
-	free(lem_in);
+	if (ap & 2 && list)
+	{
+		while (list)
+		{
+			if (ap & 16)
+				free(list->name);
+			if (ap & 8)
+				free(list->list);
+			tmp = list->next;
+			free(list);
+			list = tmp;
+		}
+	}
+	if (ap & 4)
+		free(lem_in->nodes);
+	if (ap & 1)
+		free(lem_in);
+	return (NULL);
+}
+
+t_node	*free_node(t_node **node, char *line, int ap)
+{
+	if (ap & 1)
+		free(line);
+	if (ap & 2)
+		free(*node);
+	return (NULL);
 }
