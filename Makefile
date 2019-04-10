@@ -3,7 +3,9 @@ SRC = utils/get_line.c \
 	utils/string.c \
 	utils/string_more.c \
 	get_nodes.c \
+	get_links.c \
 	support.c \
+	lem_in.c \
 	main.c \
 
 OBJ = $(SRC:.c=.o)

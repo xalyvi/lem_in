@@ -31,14 +31,20 @@ typedef struct	s_node
 
 typedef struct	s_lem_in
 {
+	int		count;
+	int		ants;
 	int		start;
 	int		end;
-	t_node	*nodes[];
+	char	*line;
+	t_node	**nodes;
 }				t_lem_in;
 
 t_lem_in    	*get_nodes();
 void    		*free_all(t_lem_in *lem_in, t_node *list, int ap);
-t_node			*free_node(t_node **node, char *line, int ap);
+t_node			*free_node(t_node *node, char *line, int ap);
+int				check_node_er(t_lem_in *lem_in, char *line, int count, t_node *node);
+int				get_links(t_lem_in *lem_in);
+void			solve_lem_in(t_lem_in *lem_in);
 
 
 /*
