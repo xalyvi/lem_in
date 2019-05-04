@@ -45,6 +45,7 @@ static t_node	*get_node(char *line, t_node **prev, int *count)
 		return (free_node(NULL, line, 1));
 	if (!(node = (t_node *)malloc(sizeof(t_node))))
 		return (free_node(NULL, line, 1));
+	node->neigh = 0;
 	node->name = ft_strsub(line, 0, name);
 	if (!get_coord(line + name, node))
 		return (free_node(node, line, 3));

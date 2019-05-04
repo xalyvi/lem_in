@@ -4,8 +4,10 @@ SRC = utils/get_line.c \
 	utils/string_more.c \
 	get_nodes.c \
 	get_links.c \
-	support.c \
+	get_nodes_support.c \
+	solve_support.c \
 	lem_in.c \
+	queue.c \
 	main.c \
 
 OBJ = $(SRC:.c=.o)

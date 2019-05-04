@@ -31,6 +31,7 @@ static void	set_link(t_lem_in *lem_in, int a, int b)
 	while (lem_in->nodes[a]->list[i] != -1 && lem_in->nodes[a]->list[i] != b)
 		i++;
 	lem_in->nodes[a]->list[i] = b;
+	lem_in->nodes[a]->neigh++;
 	i = 0;
 	while (lem_in->nodes[b]->list[i] != -1 && lem_in->nodes[b]->list[i] != a)
 		i++;
@@ -61,6 +62,7 @@ static int	find_graph(t_lem_in *lem_in, char *first, char *second)
 	if (j < 0 || k < 0)
 		return (free_lines(first, second, 3));
 	set_link(lem_in, j, k);
+	lem_in->nodes[k]->neigh++;
 	return (1);
 }
 
