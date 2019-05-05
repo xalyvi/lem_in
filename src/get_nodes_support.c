@@ -4,13 +4,12 @@ static int	enter_nodes(t_lem_in *lem_in, t_node *node)
 {
 	int	i;
 
-	if (!(lem_in->nodes = (t_node **)malloc(sizeof(t_node *) * (lem_in->count + 1))))
+	if (!(lem_in->nodes = (t_node **)malloc(sizeof(t_node *) * (lem_in->count))))
 	{
 		free_all(lem_in, node, 19);
 		return (1);
 	}
-	i = lem_in->count;
-	lem_in->nodes[i--] = 0;
+	i = lem_in->count - 1;
 	while (i > -1)
 	{
 		lem_in->nodes[i] = node;
@@ -30,8 +29,6 @@ void  	  	*free_all(t_lem_in *lem_in, t_node *list, int ap)
 		{
 			if (ap & 16)
 				free(list->name);
-			if (ap & 8)
-				free(list->list);
 			tmp = list->next;
 			free(list);
 			list = tmp;
@@ -39,6 +36,8 @@ void  	  	*free_all(t_lem_in *lem_in, t_node *list, int ap)
 	}
 	if (ap & 4)
 		free(lem_in->nodes);
+	if (ap & 8)
+		free_links(lem_in->links);
 	if (ap & 1)
 		free(lem_in);
 	return (NULL);
@@ -60,7 +59,7 @@ int			check_node_er(t_lem_in *lem_in, char *line, int count, t_node *node)
 		free_all(lem_in, NULL, 1);
 		return (1);
 	}
-	if (lem_in->start == -1 || lem_in->end == -1)
+	if (!(lem_in->flags & 3))
 	{
 		free_all(lem_in, node, 19);
 		return (1);

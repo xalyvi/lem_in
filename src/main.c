@@ -18,6 +18,6 @@ int 		main(void)
 	lem_in->ants = ants;
 	if (!get_links(lem_in))
 		return (0);
-	solve_lem_in(lem_in);
+	//solve_lem_in(lem_in);
 	return (0);
 }

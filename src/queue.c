@@ -8,6 +8,7 @@ t_queue		*create_queue(void)
 		return (NULL);
 	q->front = NULL;
 	q->rear = NULL;
+	q->size = 0;
 	return (q);
 }
 
@@ -28,6 +29,7 @@ void		add_qnode(t_queue *q, int key)
 
 	if (!(n = q_new_node(key)))
 		return ;
+	q->size++;
 	if (q->rear == NULL)
 	{
 		q->front = n;
@@ -38,17 +40,17 @@ void		add_qnode(t_queue *q, int key)
 	q->rear = n;
 }
 
-int			poll_qnode(t_queue *q)
-{
-	int		rt;
-	t_qnode	*temp;
+// int			poll_qnode(t_queue *q)
+// {
+// 	int		rt;
+// 	t_qnode	*temp;
 
-	if (q->front == NULL)
-		return (-1);
-	rt = q->rear->key;
-	temp = q->rear;
-	q->rear->next = NULL;
-}
+// 	if (q->front == NULL)
+// 		return (-1);
+// 	rt = q->rear->key;
+// 	temp = q->rear;
+// 	q->rear->next = NULL;
+// }
 
 void		delete_qnode(t_queue *q)
 {
@@ -61,4 +63,5 @@ void		delete_qnode(t_queue *q)
 	free(n);
 	if (q->front == NULL)
 		q->rear = NULL;
+	q->size--;
 }

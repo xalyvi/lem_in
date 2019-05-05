@@ -18,7 +18,7 @@ OBJDIR = ./obj
 SRCS = $(addprefix $(SRCDIR)/, $(SRC))
 OBJS = $(addprefix $(OBJDIR)/, $(OBJ))
 
-INCLUDES = -I ./include
+INCLUDES = -I ./includes
 
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra
