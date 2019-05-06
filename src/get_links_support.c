@@ -14,4 +14,5 @@ t_links    *init_links(size_t count)
         links[i].link = NULL;
         i++;
     }
+    return (links);
 }

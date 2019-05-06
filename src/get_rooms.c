@@ -13,7 +13,7 @@ static t_lem_in	*init(void)
 	return (lem_in);
 }
 
-static char		*get_coord(char *line, t_node *node)
+static char		*get_coord(char *line, t_room *node)
 {
 	if (*line == '\0' || *(line + 1) == '\0' || (*(line + 1) == '0' && *(line + 2) != ' '))
 		return (NULL);
@@ -32,9 +32,9 @@ static char		*get_coord(char *line, t_node *node)
 	return (NULL);
 }
 
-static t_node	*get_node(char *line, t_node **prev, int *count)
+static t_room	*get_room(char *line, t_room **prev, size_t *count)
 {
-	t_node	*node;
+	t_room	*node;
 	size_t	name;
 
 	name = 0;
@@ -44,7 +44,7 @@ static t_node	*get_node(char *line, t_node **prev, int *count)
 		name++;
 	if (line[name] == '\0')
 		return (free_node(NULL, line, 1));
-	if (!(node = (t_node *)malloc(sizeof(t_node))))
+	if (!(node = (t_room *)malloc(sizeof(t_room))))
 		return (free_node(NULL, line, 1));
 	node->name = ft_strsub(line, 0, name);
 	if (!get_coord(line + name, node))
@@ -59,34 +59,39 @@ static int		get_start_end(char **line, t_lem_in *lem_in, int count)
 {
 	if (line[0][1] == '#')
 	{
-		if (lem_in->flags & 3)
+		if (ft_strcmp(*line, "##start") == 0)
 		{
-			free(*line);
-			return (1);
+			if (!(lem_in->flags & 1) && (lem_in->flags |= 1))
+				lem_in->start = count;
+			else
+			{
+				free(*line);
+				return (1);
+			}
 		}
-		if (ft_strcmp(*line, "##start") == 0 && !(lem_in->flags & 1)
-				&& (lem_in->flags |= 1))
-			lem_in->start = count;
-		else if (ft_strcmp(*line, "##end") == 0 && !(lem_in->flags & 2)
-				&& (lem_in->flags |= 2))
-			lem_in->end = count;
-		else
+		else if (ft_strcmp(*line, "##end") == 0)
 		{
-			free(*line);
-			return (1);
+			if (!(lem_in->flags & 2) && (lem_in->flags |= 2))
+				lem_in->end = count;
+			else
+			{
+				free(*line);
+				return (1);
+			}
 		}
 	}
 	free(*line);
 	get_line(line);
+	ft_putendl(*line);
 	return (0);
 }
 
-t_lem_in    	*get_nodes(void)
+t_lem_in    	*get_rooms(void)
 {
     char        *line;
     t_lem_in    *lem_in;
-	t_node		*node;
-	t_node		*prev;
+	t_room		*node;
+	t_room		*prev;
 	size_t		count;
 
 	if (!(lem_in = init()))
@@ -95,12 +100,13 @@ t_lem_in    	*get_nodes(void)
 	prev = NULL;
     while (get_line(&line))
     {
+		ft_putendl(line);
         if (ft_strchr(line, '-'))
             break ;
 		if (line[0] == '#')
 			if (get_start_end(&line, lem_in, count))
 				return ((t_lem_in *)free_all(lem_in, prev, 19));
-		if (!(node = get_node(line, &prev, &count)))
+		if (!(node = get_room(line, &prev, &count)))
 				return ((t_lem_in *)free_all(lem_in, prev, 19));
 		free(line);
 		line = NULL;

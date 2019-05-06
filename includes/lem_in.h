@@ -11,10 +11,10 @@
 **	LEM_IN
 **
 **		lem_in		1
-**		nodes[]		2
-**		nodes		4
-**		nodes->list	8
-**		nodes->name	16
+**		rooms[]		2
+**		rooms		4
+**		rooms->list	8
+**		rooms->name	16
 **
 **
 **		NOTES:
@@ -26,62 +26,64 @@
 **
 */
 
-typedef struct	s_node
+typedef struct	s_room
 {
 	char			*name;
 	int				present;
 	int				x;
 	int				y;
-	struct s_node	*next;
-}				t_node;
+	struct s_room	*next;
+}				t_room;
 
-typedef struct	s_qnode
+typedef struct	s_node
 {
 	size_t		key;
 	size_t		ant;
-	struct s_qnode	*next;
-}				t_qnode;
+	struct s_node	*next;
+}				t_node;
 
 typedef struct	s_queue
 {
-	t_qnode *front;
-	t_qnode *rear;
-	size_t	size;
+	t_node *front;
+	t_node *rear;
 }				t_queue;
 
 typedef struct	s_links
 {
 	unsigned char	flags;
 	unsigned char	visited;
-	t_qnode			*link;
+	t_node			*link;
 }				t_links;
 
 typedef struct	s_lem_in
 {
 	size_t			count;
-	int				max_edge;
-	int				ants;
+	char			*line;
+	int				l;
+	int				print;
+	size_t			ants;
 	size_t			start;
 	size_t			end;
 	unsigned char	flags;
-	char			*line;
 	t_links			*links;
-	t_node			**nodes;
+	t_room			**rooms;
 }				t_lem_in;
 
 t_queue			*create_queue(void);
-void			add_qnode(t_queue *q, int key);
-void			delete_qnode(t_queue *q);
-void    		fill_array(int distance[], int count);
+void			enqueue(t_queue *q, int key);
+size_t			dequeue(t_queue *q);
+size_t			peek(t_queue *q);
+int				is_empty(t_queue *q);
 
-t_lem_in    	*get_nodes();
-void    		*free_all(t_lem_in *lem_in, t_node *list, int ap);
-t_node			*free_node(t_node *node, char *line, int ap);
-int				check_node_er(t_lem_in *lem_in, char *line, int count, t_node *node);
+t_lem_in    	*get_rooms();
+void    		*free_all(t_lem_in *lem_in, t_room *list, int ap);
+t_room			*free_node(t_room *node, char *line, int ap);
+int				check_node_er(t_lem_in *lem_in, char *line, int count, t_room *node);
 t_links   		*init_links(size_t count);
 int				get_links(t_lem_in *lem_in);
-void			solve_lem_in(t_lem_in *lem_in);
-
+int				not_in(size_t k, t_node *n);
+t_node			*bfs(t_lem_in *lem_in, size_t start);
+void			move_ants(t_lem_in *lem_in, t_node *path);
 
 /*
 **	UTILS
@@ -89,6 +91,10 @@ void			solve_lem_in(t_lem_in *lem_in);
 
 int				get_line(char **line);
 int				ft_atoi(const char *str);
+void			ft_putchar(char c);
+void			ft_putnbr(int nb);
+void			ft_putstr(char *str);
+void			ft_putendl(char *str);
 int				str_digit(char *line);
 char			*ft_strchr(char *s, int c);
 size_t			ft_strlen(const char *str);

@@ -2,12 +2,14 @@ SRC = utils/get_line.c \
 	utils/numbers.c \
 	utils/string.c \
 	utils/string_more.c \
-	get_nodes.c \
+	get_rooms.c \
 	get_links.c \
-	get_nodes_support.c \
+	get_rooms_support.c \
+	get_links_support.c \
 	solve_support.c \
-	lem_in.c \
+	bfs.c \
 	queue.c \
+	ants.c \
 	main.c \
 
 OBJ = $(SRC:.c=.o)

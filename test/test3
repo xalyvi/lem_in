@@ -1,0 +1,12 @@
+3
+dice 5 0
+##start
+face 1 2
+##end
+billiards 9 2
+donkey 5 4
+face-dice
+face-donkey
+dice-billiards
+donkey-billiards
+dice-donkey

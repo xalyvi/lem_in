@@ -1,10 +1,12 @@
 #include "lem_in.h"
 
-void    fill_array(int distance[], int count)
+int	not_in(size_t k, t_node *n)
 {
-    while (count > 0)
+    while (n)
     {
-        distance[count - 1] = -1;
-        count--;
+        if (k == n->key)
+            return (0);
+        n = n->next;
     }
+    return (1);
 }

@@ -1,6 +1,6 @@
 #include "lem_in.h"
 
-t_queue		*create_queue(void)
+t_queue	*create_queue(void)
 {
 	t_queue	*q;
 
@@ -8,28 +8,17 @@ t_queue		*create_queue(void)
 		return (NULL);
 	q->front = NULL;
 	q->rear = NULL;
-	q->size = 0;
 	return (q);
 }
 
-static void	*q_new_node(int key)
+void	enqueue(t_queue *q, int key)
 {
-	t_qnode *n;
+	t_node	*n;
 
-	if (!(n = (t_qnode *)malloc(sizeof(t_qnode))))
-		return (NULL);
+	if (!(n = (t_node *)malloc(sizeof(t_node))))
+		return ;
 	n->key = key;
 	n->next = NULL;
-	return (n);
-}
-
-void		add_qnode(t_queue *q, int key)
-{
-	t_qnode	*n;
-
-	if (!(n = q_new_node(key)))
-		return ;
-	q->size++;
 	if (q->rear == NULL)
 	{
 		q->front = n;
@@ -40,28 +29,31 @@ void		add_qnode(t_queue *q, int key)
 	q->rear = n;
 }
 
-// int			poll_qnode(t_queue *q)
-// {
-// 	int		rt;
-// 	t_qnode	*temp;
-
-// 	if (q->front == NULL)
-// 		return (-1);
-// 	rt = q->rear->key;
-// 	temp = q->rear;
-// 	q->rear->next = NULL;
-// }
-
-void		delete_qnode(t_queue *q)
+size_t	dequeue(t_queue *q)
 {
-	t_qnode	*n;
+	size_t	num;
+	t_node	*tmp;
 
 	if (q->front == NULL)
-		return ;
-	n = q->front;
+		return (0);
+	tmp = q->front;
+	num = q->front->key;
 	q->front = q->front->next;
-	free(n);
+	free(tmp);
+	tmp = NULL;
 	if (q->front == NULL)
 		q->rear = NULL;
-	q->size--;
+	return (num);
+}
+
+size_t	peek(t_queue *q)
+{
+	if (q->front)
+		return (q->front->key);
+	return (0);
+}
+
+int		is_empty(t_queue *q)
+{
+	return (!q->front && !q->rear);
 }

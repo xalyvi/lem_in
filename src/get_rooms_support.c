@@ -1,10 +1,10 @@
 #include "lem_in.h"
 
-static int	enter_nodes(t_lem_in *lem_in, t_node *node)
+static int	enter_rooms(t_lem_in *lem_in, t_room *node)
 {
 	int	i;
 
-	if (!(lem_in->nodes = (t_node **)malloc(sizeof(t_node *) * (lem_in->count))))
+	if (!(lem_in->rooms = (t_room **)malloc(sizeof(t_room *) * (lem_in->count))))
 	{
 		free_all(lem_in, node, 19);
 		return (1);
@@ -12,16 +12,35 @@ static int	enter_nodes(t_lem_in *lem_in, t_node *node)
 	i = lem_in->count - 1;
 	while (i > -1)
 	{
-		lem_in->nodes[i] = node;
+		lem_in->rooms[i] = node;
 		node = node->next;
 		i--;
 	}
 	return (0);
 }
 
-void  	  	*free_all(t_lem_in *lem_in, t_node *list, int ap)
+static void	free_links(t_links *links, size_t count)
 {
-	t_node	*tmp;
+	size_t	i;
+	t_node	*m;
+
+	i = 0;
+	while (i < count)
+	{
+		m = links[i].link;
+		while (m)
+		{
+			m = links[i].link->next;
+			free(links[i].link);
+		}
+		i++;
+	}
+	free(links);
+}
+
+void  	  	*free_all(t_lem_in *lem_in, t_room *list, int ap)
+{
+	t_room	*tmp;
 
 	if (ap & 2 && list)
 	{
@@ -35,15 +54,15 @@ void  	  	*free_all(t_lem_in *lem_in, t_node *list, int ap)
 		}
 	}
 	if (ap & 4)
-		free(lem_in->nodes);
+		free(lem_in->rooms);
 	if (ap & 8)
-		free_links(lem_in->links);
+		free_links(lem_in->links, lem_in->count);
 	if (ap & 1)
 		free(lem_in);
 	return (NULL);
 }
 
-t_node		*free_node(t_node *node, char *line, int ap)
+t_room		*free_node(t_room *node, char *line, int ap)
 {
 	if (ap & 1)
 		free(line);
@@ -52,7 +71,7 @@ t_node		*free_node(t_node *node, char *line, int ap)
 	return (NULL);
 }
 
-int			check_node_er(t_lem_in *lem_in, char *line, int count, t_node *node)
+int			check_node_er(t_lem_in *lem_in, char *line, int count, t_room *node)
 {
 	if (node == NULL || count < 1)
 	{
@@ -73,7 +92,7 @@ int			check_node_er(t_lem_in *lem_in, char *line, int count, t_node *node)
 		free(line);
 		return (1);
 	}
-	if (enter_nodes(lem_in, node))
+	if (enter_rooms(lem_in, node))
 		return (1);
 	return (0);
 }

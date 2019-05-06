@@ -28,3 +28,15 @@ char		*ft_strsub(char const *s, unsigned int start, size_t len)
 	sub[i] = '\0';
 	return (sub);
 }
+
+void		ft_putstr(char *str)
+{
+	while (*str != '\0')
+		write(1, str++, 1);
+}
+
+void		ft_putendl(char *str)
+{
+	ft_putstr(str);
+	write(1, "\n", 1);
+}

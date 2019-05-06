@@ -1,4 +1,5 @@
 #include "lem_in.h"
+#include <stdio.h>
 
 static int	free_lines(char *first, char *second, int ap)
 {
@@ -9,39 +10,51 @@ static int	free_lines(char *first, char *second, int ap)
 	return (0);
 }
 
-static void	set_link(t_lem_in *lem_in, size_t a, size_t b)
+static void	set_link(t_links *link, size_t a)
 {
-	
+	t_node	*m;
+	t_node	*j;
 
-	
+	m = (t_node *)malloc(sizeof(t_node));
+	m->key = a;
+	m->ant = 0;
+	m->next = NULL;
+	j = link->link;
+	if (!j)
+	{
+		link->link = m;
+		return ;
+	}
+	while (j->next)
+		j = j->next;
+	j->next = m;
 }
 
 static int	find_graph(t_lem_in *lem_in, char *first, char *second)
 {
 	size_t			i;
-	size_t			j;
-	size_t			k;
-	unsigned char	f;
+	t_links			*j;
+	t_links			*k;
 
 	i = 0;
-	j = 0;
-	k = 0;
-	f = 0;
+	j = NULL;
+	k = NULL;
 	if (ft_strcmp(first, second) == 0)
 		return (free_lines(first, second, 3));
 	while (i < lem_in->count)
 	{
-		if (ft_strcmp(lem_in->nodes[i]->name, first) == 0 && ++f)
-			j = i;
-		else if (ft_strcmp(lem_in->nodes[i]->name, second) == 0 && ++f)
-			k = i;
-		if (f == 1)
+		if (!j && ft_strcmp(lem_in->rooms[i]->name, first) == 0)
+			j = lem_in->links + i;
+		else if (!k && ft_strcmp(lem_in->rooms[i]->name, second) == 0)
+			k = lem_in->links + i;
+		else if (j && k)
 			break ;
 		i++;
 	}
-	if (f != 2)
+	if (!j && !k)
 		return (free_lines(first, second, 3));
-	set_link(lem_in, j, k);
+	set_link(j, (size_t)(k - lem_in->links));
+	set_link(k, (size_t)(j - lem_in->links));
 	return (1);
 }
 
@@ -85,6 +98,7 @@ int			get_links(t_lem_in *lem_in)
 	lem_in->line = NULL;
 	while (get_line(&line))
 	{
+		ft_putendl(line);
 		if (line[0] == '#')
 		{
 			if (line[1] == '#')
