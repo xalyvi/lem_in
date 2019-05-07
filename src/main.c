@@ -69,7 +69,7 @@ int 		main(void)
 	if (!get_links(lem_in))
 		return (0);
 	path = bfs(lem_in, 0);
-	// print_shit(lem_in, path);
+	//print_shit(lem_in, path);
 	write(1, "\n", 1);
 	move_ants(lem_in, path);
 	return (0);

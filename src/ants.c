@@ -45,11 +45,17 @@ static void		check_ants(t_lem_in *lemin, t_node *tmp, size_t *i)
 	while (tmp && ++lemin->l >= 0)
 	{
 		if (!tmp->next && tmp->ant)
-			*i = *i + 1;
-		else if (tmp->ant == 0 || !tmp->next)
 		{
 			tmp->ant = *i + 1;
-			if (tmp->next && tmp->ant && lemin->l != 0)
+			print_ant(lemin, tmp);
+			*i = *i + 1;
+		}
+		else if (tmp->ant == 0)
+		{
+			tmp->ant = *i + 1;
+			if (!tmp->next)
+				*i = *i + 1;
+			if (tmp->ant && lemin->l != 0)
 				print_ant(lemin, tmp);
 			break ;
 		}
