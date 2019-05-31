@@ -1,22 +1,34 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   string.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: srolland <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/05/30 16:44:32 by srolland          #+#    #+#             */
+/*   Updated: 2019/05/30 16:44:33 by srolland         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lem_in.h"
 
 int		str_digit(char *line)
 {
 	if (*line == '0' && *(line + 1) != '\0')
-	    return (0);
-    while (*line != '\0')
-    {
-	    if (*line >= '0' && *line <= '9')
-            line++;
-        else
-            return (0);
-    }
-    return (1);
+		return (0);
+	while (*line != '\0')
+	{
+		if (*line >= '0' && *line <= '9')
+			line++;
+		else
+			return (0);
+	}
+	return (1);
 }
 
 char	*ft_strchr(char *s, int c)
 {
-    size_t	i;
+	size_t	i;
 
 	i = 0;
 	while (s[i])

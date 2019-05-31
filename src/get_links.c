@@ -1,5 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_links.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: srolland <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/05/30 16:36:10 by srolland          #+#    #+#             */
+/*   Updated: 2019/05/30 16:36:11 by srolland         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lem_in.h"
-#include <stdio.h>
 
 static int	free_lines(char *first, char *second, int ap)
 {
@@ -65,7 +76,7 @@ static int	get_names(t_lem_in *lem_in, char *line)
 	int		i;
 
 	i = 0;
-	while(line[i] && line[i] != '-')
+	while (line[i] && line[i] != '-')
 		i++;
 	if (line[0] == 'L' || line[0] == '#' || line[i] != '-')
 		return (0);
@@ -75,7 +86,7 @@ static int	get_names(t_lem_in *lem_in, char *line)
 	i = 0;
 	while (line[i])
 		i++;
-	if (line[0] == 'L' || line[0] == '#' ||!(second = ft_strsub(line, 0, i)))
+	if (line[0] == 'L' || line[0] == '#' || !(second = ft_strsub(line, 0, i)))
 		return (free_lines(first, NULL, 1));
 	if (!find_graph(lem_in, first, second))
 		return (0);

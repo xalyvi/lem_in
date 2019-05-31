@@ -1,10 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_rooms_support.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: srolland <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/05/30 16:42:08 by srolland          #+#    #+#             */
+/*   Updated: 2019/05/30 16:42:23 by srolland         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lem_in.h"
 
 static int	enter_rooms(t_lem_in *lem_in, t_room *node)
 {
 	int	i;
 
-	if (!(lem_in->rooms = (t_room **)malloc(sizeof(t_room *) * (lem_in->count))))
+	if (!(lem_in->rooms = (t_room **)malloc(sizeof(t_room *)
+					* (lem_in->count))))
 	{
 		free_all(lem_in, node, 19);
 		return (1);
@@ -38,7 +51,7 @@ static void	free_links(t_links *links, size_t count)
 	free(links);
 }
 
-void  	  	*free_all(t_lem_in *lem_in, t_room *list, int ap)
+void		*free_all(t_lem_in *lem_in, t_room *list, int ap)
 {
 	t_room	*tmp;
 

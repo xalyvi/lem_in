@@ -6,26 +6,6 @@
 # include <string.h>
 # include <stdio.h>
 
-
-/*
-**	LEM_IN
-**
-**		lem_in		1
-**		rooms[]		2
-**		rooms		4
-**		rooms->list	8
-**		rooms->name	16
-**
-**
-**		NOTES:
-**
-**
-**
-**
-**
-**
-*/
-
 typedef struct	s_room
 {
 	char			*name;
