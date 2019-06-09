@@ -10,6 +10,7 @@ SRC = utils/get_line.c \
 	bfs.c \
 	queue.c \
 	ants.c \
+	free_error.c \
 	main.c \
 
 OBJ = $(SRC:.c=.o)
@@ -25,7 +26,7 @@ INCLUDES = -I ./includes
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra
 
-NAME = lem_in
+NAME = lem-in
 
 all: $(NAME)
 

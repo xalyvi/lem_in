@@ -6,7 +6,7 @@
 /*   By: srolland <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/30 16:44:52 by srolland          #+#    #+#             */
-/*   Updated: 2019/05/30 16:44:57 by srolland         ###   ########.fr       */
+/*   Updated: 2019/06/09 19:47:39 by srolland         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,22 @@ int			ft_strcmp(const char *s1, const char *s2)
 		s1++;
 		s2++;
 	}
+	return ((unsigned char)*s1 - (unsigned char)*s2);
+}
+
+int			ft_strncmp(const char *s1, const char *s2, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < n && *s1 == *s2 && *s1 && *s2)
+	{
+		s1++;
+		s2++;
+		i++;
+	}
+	if (i == n)
+		return (0);
 	return ((unsigned char)*s1 - (unsigned char)*s2);
 }
 

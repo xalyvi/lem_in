@@ -12,29 +12,39 @@
 
 #include "lem_in.h"
 
-int		ft_atoi(const char *str)
+int			ft_isnumbers(const char *str)
 {
-	long	nbr;
-	char	neg;
+	size_t	i;
 
-	neg = (*str == '-');
-	if (*str == '-' || *str == '+')
-		str++;
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] < '0' || str[i] > '9')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+uintmax_t	ft_atoi(const char *str)
+{
+	uintmax_t	nbr;
+
 	nbr = 0;
 	while (*str >= '0' && *str <= '9')
 	{
 		nbr = nbr * 10 + (*str - '0');
 		str++;
 	}
-	return (neg ? -nbr : nbr);
+	return (nbr);
 }
 
-void	ft_putchar(char c)
+void		ft_putchar(char c)
 {
 	write(1, &c, 1);
 }
 
-void	ft_putnbr(int nb)
+void		ft_putnbr(int nb)
 {
 	if (nb < 0)
 	{

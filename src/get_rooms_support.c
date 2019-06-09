@@ -6,7 +6,7 @@
 /*   By: srolland <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/30 16:42:08 by srolland          #+#    #+#             */
-/*   Updated: 2019/05/30 16:42:23 by srolland         ###   ########.fr       */
+/*   Updated: 2019/06/09 19:55:00 by srolland         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,7 @@ static int	enter_rooms(t_lem_in *lem_in, t_room *node)
 
 	if (!(lem_in->rooms = (t_room **)malloc(sizeof(t_room *)
 					* (lem_in->count))))
-	{
-		free_all(lem_in, node, 19);
-		return (1);
-	}
+		return (free_error(lem_in, node, NULL, NULL));
 	i = lem_in->count - 1;
 	while (i > -1)
 	{
@@ -32,80 +29,31 @@ static int	enter_rooms(t_lem_in *lem_in, t_room *node)
 	return (0);
 }
 
-static void	free_links(t_links *links, size_t count)
+int			check_room_er(t_lem_in *lem_in, t_room *room)
 {
-	size_t	i;
-	t_node	*m;
+	t_room	*t;
 
-	i = 0;
-	while (i < count)
+	if (room)
 	{
-		m = links[i].link;
-		while (m)
+		t = room;
+		room = room->next;
+		while (room)
 		{
-			m = links[i].link->next;
-			free(links[i].link);
-		}
-		i++;
-	}
-	free(links);
-}
-
-void		*free_all(t_lem_in *lem_in, t_room *list, int ap)
-{
-	t_room	*tmp;
-
-	if (ap & 2 && list)
-	{
-		while (list)
-		{
-			if (ap & 16)
-				free(list->name);
-			tmp = list->next;
-			free(list);
-			list = tmp;
+			if (ft_strcmp(t->name, room->name) == 0 || (room->x == t->x && room->y == t->y))
+				return (free_error(lem_in, room, NULL, NULL));
+			room = room->next;
 		}
 	}
-	if (ap & 4)
-		free(lem_in->rooms);
-	if (ap & 8)
-		free_links(lem_in->links, lem_in->count);
-	if (ap & 1)
-		free(lem_in);
-	return (NULL);
+	return (1);
 }
 
-t_room		*free_node(t_room *node, char *line, int ap)
+int			check_points(t_lem_in *lem_in, size_t count, char *line, t_room *room)
 {
-	if (ap & 1)
-		free(line);
-	if (ap & 2)
-		free(node);
-	return (NULL);
-}
-
-int			check_node_er(t_lem_in *lem_in, char *line, int count, t_room *node)
-{
-	if (node == NULL || count < 1)
-	{
-		free_all(lem_in, NULL, 1);
-		return (1);
-	}
-	if (!(lem_in->flags & 3))
-	{
-		free_all(lem_in, node, 19);
-		return (1);
-	}
+	if (!(lem_in->flags & 3) || count < 1 || !line || !ft_strchr(line, '-'))
+		return (free_error(lem_in, room, line, NULL));
 	lem_in->count = count;
-	if (line != NULL && ft_strchr(line, '-'))
-		lem_in->line = line;
-	else
-	{
-		free_all(lem_in, node, 19);
-		free(line);
-		return (1);
-	}
-	if (enter_rooms(lem_in, node))
-		return (1);
-	return (0);
+	lem_in->line = line;
+	if (!enter_rooms(lem_in, room))
+		return (0);
+	return (1);
 }

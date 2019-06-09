@@ -6,7 +6,7 @@
 /*   By: srolland <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/30 16:32:14 by srolland          #+#    #+#             */
-/*   Updated: 2019/05/30 16:33:18 by srolland         ###   ########.fr       */
+/*   Updated: 2019/06/09 20:05:29 by srolland         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ t_node			*bfs(t_lem_in *lem_in, size_t start)
 			return (ret(q, path));
 	}
 	if (!valid_path(path, lem_in->start, lem_in->end))
-		return (NULL);
+		return (!(free_error(lem_in, NULL, NULL, path)) ? NULL : NULL);
 	free(q);
 	return (path);
 }

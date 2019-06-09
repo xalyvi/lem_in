@@ -6,20 +6,11 @@
 /*   By: srolland <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/30 16:36:10 by srolland          #+#    #+#             */
-/*   Updated: 2019/05/30 16:36:11 by srolland         ###   ########.fr       */
+/*   Updated: 2019/06/09 19:56:10 by srolland         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lem_in.h"
-
-static int	free_lines(char *first, char *second, int ap)
-{
-	if (ap & 1)
-		free(first);
-	if (ap & 2)
-		free(second);
-	return (0);
-}
 
 static void	set_link(t_links *link, size_t a)
 {
@@ -41,7 +32,7 @@ static void	set_link(t_links *link, size_t a)
 	j->next = m;
 }
 
-static int	find_graph(t_lem_in *lem_in, char *first, char *second)
+static int	find_graph(t_lem_in *lem_in, size_t	dash)
 {
 	size_t			i;
 	t_links			*j;
@@ -50,78 +41,53 @@ static int	find_graph(t_lem_in *lem_in, char *first, char *second)
 	i = 0;
 	j = NULL;
 	k = NULL;
-	if (ft_strcmp(first, second) == 0)
-		return (free_lines(first, second, 3));
 	while (i < lem_in->count)
 	{
-		if (!j && ft_strcmp(lem_in->rooms[i]->name, first) == 0)
+		if (!j && ft_strncmp(lem_in->rooms[i]->name, lem_in->line, dash) == 0)
 			j = lem_in->links + i;
-		else if (!k && ft_strcmp(lem_in->rooms[i]->name, second) == 0)
+		else if (!k && ft_strcmp(lem_in->rooms[i]->name, lem_in->line + dash + 1) == 0)
 			k = lem_in->links + i;
 		else if (j && k)
 			break ;
 		i++;
 	}
 	if (!j && !k)
-		return (free_lines(first, second, 3));
+		return (0);
 	set_link(j, (size_t)(k - lem_in->links));
 	set_link(k, (size_t)(j - lem_in->links));
 	return (1);
 }
 
-static int	get_names(t_lem_in *lem_in, char *line)
+static int	get_names(t_lem_in *lem_in)
 {
-	char	*first;
-	char	*second;
-	int		i;
+	size_t	dash;
 
-	i = 0;
-	while (line[i] && line[i] != '-')
-		i++;
-	if (line[0] == 'L' || line[0] == '#' || line[i] != '-')
+	dash = 0;
+	while (lem_in->line[dash] != '\0' && lem_in->line[dash] != '-')
+		dash++;
+	if (ft_strncmp(lem_in->line, lem_in->line + dash + 1, dash) == 0)
 		return (0);
-	if (!(first = ft_strsub(line, 0, i)))
-		return (0);
-	line = line + i + 1;
-	i = 0;
-	while (line[i])
-		i++;
-	if (line[0] == 'L' || line[0] == '#' || !(second = ft_strsub(line, 0, i)))
-		return (free_lines(first, NULL, 1));
-	if (!find_graph(lem_in, first, second))
-		return (0);
-	free(first);
-	free(second);
-	return (1);
+	return (find_graph(lem_in, dash));
 }
 
 int			get_links(t_lem_in *lem_in)
 {
-	char	*line;
-
 	lem_in->links = init_links(lem_in->count);
-	if (!get_names(lem_in, lem_in->line))
-	{
-		free(lem_in->line);
-		return (0);
-	}
+	if (!get_names(lem_in))
+		return (free_error(lem_in, NULL, NULL, NULL));
 	free(lem_in->line);
-	lem_in->line = NULL;
-	while (get_line(&line))
+	while (get_line(&(lem_in->line)))
 	{
-		ft_putendl(line);
-		if (line[0] == '#')
+		ft_putendl(lem_in->line);
+		if (lem_in->line[0] == '#')
 		{
-			if (line[1] == '#')
-			{
-				free(line);
-				return (0);
-			}
-			free(line);
+			if (lem_in->line[1] == '#')
+				return (free_error(lem_in, NULL, NULL, NULL));
+			free(lem_in->line);
 			continue;
 		}
-		get_names(lem_in, line);
-		free(line);
+		get_names(lem_in);
+		free(lem_in->line);
 	}
 	return (1);
 }

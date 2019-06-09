@@ -6,7 +6,7 @@
 /*   By: srolland <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/30 16:38:27 by srolland          #+#    #+#             */
-/*   Updated: 2019/05/30 16:38:28 by srolland         ###   ########.fr       */
+/*   Updated: 2019/06/09 20:21:30 by srolland         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,28 +22,30 @@ static t_lem_in	*init(void)
 	lem_in->flags = 0;
 	lem_in->end = 0;
 	lem_in->line = NULL;
+	lem_in->links = NULL;
+	lem_in->rooms = NULL;
 	return (lem_in);
 }
 
-static char		*get_coord(char *line, t_room *node)
+static int		get_coord(char *line, t_room *node)
 {
 	if (*line == '\0' || *(line + 1) == '\0' ||
 			(*(line + 1) == '0' && *(line + 2) != ' '))
-		return (NULL);
+		return (0);
 	else
 		node->x = ft_atoi(++line);
 	while (*line >= '0' && *line <= '9')
 		line++;
 	if (*line == '\0' || *(line + 1) == '\0' ||
 			(*(line + 1) == '0' && *(line + 2) != '\0'))
-		return (NULL);
+		return (0);
 	else
 		node->y = ft_atoi(++line);
 	while (*line >= '0' && *line <= '9')
 		line++;
 	if (*line == '\0')
-		return (line);
-	return (NULL);
+		return (1);
+	return (0);
 }
 
 static t_room	*get_room(char *line, t_room **prev, size_t *count)
@@ -53,16 +55,19 @@ static t_room	*get_room(char *line, t_room **prev, size_t *count)
 
 	name = 0;
 	if (line[0] == 'L')
-		return (free_node(NULL, line, 1));
+		return (NULL);
 	while (line[name] != ' ' && line[name] != '\0')
 		name++;
 	if (line[name] == '\0')
-		return (free_node(NULL, line, 1));
+		return (NULL);
 	if (!(node = (t_room *)malloc(sizeof(t_room))))
-		return (free_node(NULL, line, 1));
+		return (NULL);
 	node->name = ft_strsub(line, 0, name);
 	if (!get_coord(line + name, node))
-		return (free_node(node, line, 3));
+	{
+		free(node);
+		return (NULL);
+	}
 	node->next = *prev;
 	*prev = node;
 	*count += 1;
@@ -79,20 +84,14 @@ static int		get_start_end(char **line, t_lem_in *lem_in,
 			if (!(lem_in->flags & 1) && (lem_in->flags |= 1))
 				lem_in->start = count;
 			else
-			{
-				free(*line);
 				return (1);
-			}
 		}
 		else if (ft_strcmp(*line, "##end") == 0)
 		{
 			if (!(lem_in->flags & 2) && (lem_in->flags |= 2))
 				lem_in->end = count;
 			else
-			{
-				free(*line);
 				return (1);
-			}
 		}
 	}
 	free(*line);
@@ -120,13 +119,15 @@ t_lem_in		*get_rooms(void)
 			break ;
 		if (line[0] == '#')
 			if (get_start_end(&line, lem_in, count))
-				return ((t_lem_in *)free_all(lem_in, prev, 19));
+				return ((!free_error(lem_in, prev, line, NULL)) ? NULL : NULL);
 		if (!(node = get_room(line, &prev, &count)))
-			return ((t_lem_in *)free_all(lem_in, prev, 19));
+			return ((!free_error(lem_in, prev, line, NULL)) ? NULL : NULL);
 		free(line);
+		if (!check_room_er(lem_in, node))
+			return (NULL);
 		line = NULL;
 	}
-	if (check_node_er(lem_in, line, count, node))
+	if (!check_points(lem_in, count, line, node))
 		return (NULL);
 	return (lem_in);
 }
