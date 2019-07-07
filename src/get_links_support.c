@@ -22,7 +22,7 @@ t_links	*init_links(size_t count)
 	while (i < count)
 	{
 		links[i].flags = 0;
-		links[i].visited = 0;
+		links[i].level = -1;
 		links[i].link = NULL;
 		i++;
 	}

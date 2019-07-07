@@ -26,7 +26,7 @@ static int	enter_rooms(t_lem_in *lem_in, t_room *node)
 		node = node->next;
 		i--;
 	}
-	return (0);
+	return (1);
 }
 
 int			check_room_er(t_lem_in *lem_in, t_room *room)

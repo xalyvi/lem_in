@@ -20,6 +20,9 @@ static void	set_link(t_links *link, size_t a)
 	m = (t_node *)malloc(sizeof(t_node));
 	m->key = a;
 	m->ant = 0;
+	m->io = 0;
+	m->i = 0;
+	m->o = 0;
 	m->next = NULL;
 	j = link->link;
 	if (!j)
@@ -51,7 +54,7 @@ static int	find_graph(t_lem_in *lem_in, size_t	dash)
 			break ;
 		i++;
 	}
-	if (!j && !k)
+	if (!j || !k)
 		return (0);
 	set_link(j, (size_t)(k - lem_in->links));
 	set_link(k, (size_t)(j - lem_in->links));
@@ -86,7 +89,8 @@ int			get_links(t_lem_in *lem_in)
 			free(lem_in->line);
 			continue;
 		}
-		get_names(lem_in);
+		if (!get_names(lem_in))
+			return (free_error(lem_in, NULL, NULL, NULL));
 		free(lem_in->line);
 	}
 	return (1);

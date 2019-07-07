@@ -11,13 +11,46 @@
 /* ************************************************************************** */
 
 #include "lem_in.h"
+#include <stdio.h>
+
+static void	print_levels(t_lem_in *lem_in)
+{
+	t_links *link;
+	t_node	*node;
+	size_t	n;
+
+	link = lem_in->links;
+	n = 0;
+	write(1, "\n\n", 2);
+	while (n < lem_in->count)
+	{
+		printf("node: %s level: %d\n", lem_in->rooms[n]->name, lem_in->links[n].level);
+		printf("\t inputs:");
+		node = lem_in->links[n].link;
+		while (node)
+		{
+			if (node->io == 1)
+				printf(" %s", lem_in->rooms[node->key]->name);
+			node = node->next;
+		}
+		printf("\n\toutputs:");
+		node = lem_in->links[n].link;
+		while (node)
+		{
+			if (node->io == 2)
+				printf(" %s", lem_in->rooms[node->key]->name);
+			node = node->next;
+		}
+		printf("\n");
+		n++;
+	}
+}
 
 int	main(void)
 {
 	char		*line;
 	uintmax_t	ants;
 	t_lem_in	*lem_in;
-	t_node		*path;
 
 	ants = 0;
 	line = NULL;
@@ -29,16 +62,18 @@ int	main(void)
 	ants = ft_atoi(line);
 	if (ants > 2147483647)
 		return (free_error(NULL, NULL, NULL, NULL));
-	ft_putendl(line);
 	free(line);
 	if (!(lem_in = get_rooms()))
+	{
+		write(1, "\nreturn main (0)\n", 17);
 		return (0);
+	}
 	lem_in->ants = ants;
 	if (!get_links(lem_in))
 		return (0);
-	if (!(path = bfs(lem_in, 0)))
-		return (0);
+	bfs(lem_in);
+	print_levels(lem_in);
 	write(1, "\n", 1);
-	move_ants(lem_in, path);
+	//move_ants(lem_in, path);
 	return (0);
 }
