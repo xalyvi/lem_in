@@ -63,28 +63,38 @@ static void	deleto_end(t_links *links, size_t s, size_t p)
 	}
 }
 
-void		deleto_links(t_lem_in *lem_in)
+void		iterate_dead(t_links *links, size_t start)
 {
-    size_t  i;
-	size_t	j;
+	t_node	*node;
 
-	j = 0;
-	while (j < 3)
+	node = links[start].output;
+	if (links[start].level == INT_MAX)
+		return ;
+	if (links[start].o > 0)
 	{
-		i = 0;
-		while (i < lem_in->count)
+		while (node)
 		{
-			if (i != lem_in->end && i != lem_in->start && lem_in->links[i].level > -1)
-			{
-				if (j == 0 && lem_in->links[i].o < 1)
-					deleto_end(lem_in->links, i, 0);
-				else if (j == 1 && lem_in->links[i].i > 1)
-					deleto_input(lem_in->links, i);
-				else if (j == 2 && lem_in->links, i)
-					deleto_output(lem_in->links, i);
-			}
-			i++;
+			iterate_dead(links, node->key);
+			node = node->next;
 		}
-		j++;
+		return ;
+	}
+	deleto_end(links, start, 0);
+}
+
+void		iterate_input(t_links *links, size_t start)
+{
+	t_node	*node;
+
+	node = links[start].output;
+	if (links[start].level == INT_MAX)
+		return ;
+	if (links[start].i > 1)
+		deleto_input(links, start);
+	node = links[start].output;
+	while (node)
+	{
+		iterate_input(links, node->key);
+		node = node->next;
 	}
 }

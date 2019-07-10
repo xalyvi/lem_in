@@ -194,5 +194,7 @@ void	bfs(t_lem_in *lem_in)
 	}
 	free(q);
 	input_output(lem_in);
-	deleto_links(lem_in);
+	iterate_dead(lem_in->links, lem_in->start);
+	iterate_input(lem_in->links, lem_in->start);
+	iterate_output(lem_in->links, lem_in->end);
 }

@@ -44,7 +44,6 @@ typedef struct	s_queue
 
 typedef struct	s_links
 {
-	unsigned char	flags;
 	int				level;
 	size_t			i;
 	size_t			o;
@@ -83,8 +82,9 @@ void			bfs(t_lem_in *lem_in);
 int				check_points(t_lem_in *lem_in, size_t count, char *line, t_room *room);
 int				free_error(t_lem_in *lem_in, t_room *room, char *line, t_node *path);
 t_node			*unlist(t_node *prev, t_node *node, t_node **ls);
-void			deleto_links(t_lem_in *lem_in);
-void   			deleto_output(t_links *links, size_t s)
+void			iterate_dead(t_links *links, size_t start);
+void			iterate_input(t_links *links, size_t start);
+void   			iterate_output(t_links *links, size_t start);
 
 /*
 **	UTILS

@@ -21,11 +21,11 @@ t_links	*init_links(size_t count)
 	i = 0;
 	while (i < count)
 	{
-		links[i].flags = 0;
 		links[i].level = -1;
 		links[i].i = 0;
 		links[i].o = 0;
 		links[i].input = NULL;
+		links[i].output = NULL;
 		i++;
 	}
 	return (links);
