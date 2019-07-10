@@ -23,7 +23,9 @@ t_links	*init_links(size_t count)
 	{
 		links[i].flags = 0;
 		links[i].level = -1;
-		links[i].link = NULL;
+		links[i].i = 0;
+		links[i].o = 0;
+		links[i].input = NULL;
 		i++;
 	}
 	return (links);

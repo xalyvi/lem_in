@@ -9,6 +9,8 @@ SRC = utils/get_line.c \
 	solve_support.c \
 	bfs.c \
 	queue.c \
+	mapset.c \
+	output_forks.c \
 	ants.c \
 	free_error.c \
 	main.c \

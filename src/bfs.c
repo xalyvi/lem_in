@@ -101,33 +101,60 @@
 // 	return (path);
 // }
 
+static t_node	*inlist(t_node *list, t_node *node)
+{
+	node->next = list;
+	return (node);
+}
+
+t_node	*unlist(t_node *prev, t_node *node, t_node **ls)
+{
+	if (!prev)
+		*ls = node->next;
+	else
+		prev->next = node->next;
+	return (node);
+}
+
+
 static void	input_output(t_lem_in *lem_in)
 {
 	size_t	i;
 	t_node	*node;
+	t_node	*prev;
 
 	i = 0;
 	while (i < lem_in->count)
 	{
 		if (lem_in->links[i].level > -1)
 		{
-			node = lem_in->links[i].link;
+			prev = NULL;
+			node = lem_in->links[i].input;
 			while (node)
 			{
-				if (lem_in->links[node->key].level > -1)
+				if (lem_in->links[node->key].level == -1 || lem_in->links[node->key].level == lem_in->links[i].level)
 				{
-					if (lem_in->links[i].level > lem_in->links[node->key].level)
-					{
-						node->io = 1;
-						node->i++;
-					}
-					else if (lem_in->links[i].level < lem_in->links[node->key].level)
-					{
-						node->io = 2;
-						node->o++;
-					}
+						free(unlist(prev, node, &(lem_in->links[i].input)));
+						if (prev)
+							node = prev->next;
+						else
+							node = lem_in->links[i].input;
 				}
-				node = node->next;
+				else if (lem_in->links[i].level > lem_in->links[node->key].level)
+				{
+					lem_in->links[i].i++;
+					prev = node;
+					node = node->next;
+				}
+				else if (lem_in->links[i].level < lem_in->links[node->key].level)
+				{
+					lem_in->links[i].output = inlist(lem_in->links[i].output, unlist(prev, node, &(lem_in->links[i].input)));				
+					lem_in->links[i].o++;
+					if (prev)
+						node = prev->next;
+					else
+						node = lem_in->links[i].input;
+				}
 			}
 		}
 		i++;
@@ -138,7 +165,7 @@ static void	assign_levels(t_queue *q,t_lem_in *lem_in, int n)
 {
 	t_node	*node;
 
-	node = lem_in->links[n].link;
+	node = lem_in->links[n].input;
 	while (node)
 	{
 		if (lem_in->links[node->key].level < 0)
@@ -167,4 +194,5 @@ void	bfs(t_lem_in *lem_in)
 	}
 	free(q);
 	input_output(lem_in);
+	deleto_links(lem_in);
 }

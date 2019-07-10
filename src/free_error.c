@@ -39,11 +39,11 @@ static void free_links(t_links *links, size_t size)
 	i = 0;
 	while (i < size)
 	{
-		while (links[i].link)
+		while (links[i].input)
 		{
-			t_link = links[i].link->next;
-			free(links[i].link);
-			links[i].link = t_link;
+			t_link = links[i].input->next;
+			free(links[i].input);
+			links[i].input = t_link;
 		}
 		i++;
 	}

@@ -17,6 +17,7 @@
 # include <unistd.h>
 # include <string.h>
 # include <stdio.h>
+# include <stdint.h>
 # include <limits.h>
 
 typedef struct	s_room
@@ -32,9 +33,6 @@ typedef struct	s_node
 {
 	size_t			key;
 	size_t			ant;
-	size_t			io;
-	size_t			i;
-	size_t			o;
 	struct s_node	*next;
 }				t_node;
 
@@ -48,7 +46,10 @@ typedef struct	s_links
 {
 	unsigned char	flags;
 	int				level;
-	t_node			*link;
+	size_t			i;
+	size_t			o;
+	t_node			*input;
+	t_node			*output;
 }				t_links;
 
 typedef struct	s_lem_in
@@ -78,9 +79,12 @@ t_links			*init_links(size_t count);
 int				get_links(t_lem_in *lem_in);
 int				not_in(size_t k, t_node *n);
 void			bfs(t_lem_in *lem_in);
-void			move_ants(t_lem_in *lem_in, t_node *path);
+// void			move_ants(t_lem_in *lem_in, t_node *path);
 int				check_points(t_lem_in *lem_in, size_t count, char *line, t_room *room);
 int				free_error(t_lem_in *lem_in, t_room *room, char *line, t_node *path);
+t_node			*unlist(t_node *prev, t_node *node, t_node **ls);
+void			deleto_links(t_lem_in *lem_in);
+void   			deleto_output(t_links *links, size_t s)
 
 /*
 **	UTILS

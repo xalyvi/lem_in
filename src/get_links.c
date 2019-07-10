@@ -20,14 +20,11 @@ static void	set_link(t_links *link, size_t a)
 	m = (t_node *)malloc(sizeof(t_node));
 	m->key = a;
 	m->ant = 0;
-	m->io = 0;
-	m->i = 0;
-	m->o = 0;
 	m->next = NULL;
-	j = link->link;
+	j = link->input;
 	if (!j)
 	{
-		link->link = m;
+		link->input = m;
 		return ;
 	}
 	while (j->next)
@@ -63,14 +60,19 @@ static int	find_graph(t_lem_in *lem_in, size_t	dash)
 
 static int	get_names(t_lem_in *lem_in)
 {
-	size_t	dash;
+	size_t	len1;
+	size_t	len2;
 
-	dash = 0;
-	while (lem_in->line[dash] != '\0' && lem_in->line[dash] != '-')
-		dash++;
-	if (ft_strncmp(lem_in->line, lem_in->line + dash + 1, dash) == 0)
+	len1 = 0;
+	while (lem_in->line[len1] != '\0' && lem_in->line[len1] != '-')
+		len1++;
+	len2 = len1 + 1;
+	while (lem_in->line[len2] != '\0')
+		len2++;
+	len2 = len2 - len1 - 1;
+	if (ft_strncmp(lem_in->line, lem_in->line + len1 + 1, ((len1 > len2) ? len1 : len2)) == 0)
 		return (0);
-	return (find_graph(lem_in, dash));
+	return (find_graph(lem_in, len1));
 }
 
 int			get_links(t_lem_in *lem_in)

@@ -13,32 +13,28 @@
 #include "lem_in.h"
 #include <stdio.h>
 
-static void	print_levels(t_lem_in *lem_in)
+void	print_levels(t_lem_in *lem_in)
 {
-	t_links *link;
 	t_node	*node;
 	size_t	n;
 
-	link = lem_in->links;
 	n = 0;
 	write(1, "\n\n", 2);
 	while (n < lem_in->count)
 	{
-		printf("node: %s level: %d\n", lem_in->rooms[n]->name, lem_in->links[n].level);
+		printf("node: %s level: %d i: %zu o: %zu\n", lem_in->rooms[n]->name, lem_in->links[n].level, lem_in->links[n].i, lem_in->links[n].o);
 		printf("\t inputs:");
-		node = lem_in->links[n].link;
+		node = lem_in->links[n].input;
 		while (node)
 		{
-			if (node->io == 1)
-				printf(" %s", lem_in->rooms[node->key]->name);
+			printf(" %s", lem_in->rooms[node->key]->name);
 			node = node->next;
 		}
 		printf("\n\toutputs:");
-		node = lem_in->links[n].link;
+		node = lem_in->links[n].output;
 		while (node)
 		{
-			if (node->io == 2)
-				printf(" %s", lem_in->rooms[node->key]->name);
+			printf(" %s", lem_in->rooms[node->key]->name);
 			node = node->next;
 		}
 		printf("\n");
