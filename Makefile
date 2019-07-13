@@ -11,6 +11,7 @@ SRC = utils/get_line.c \
 	queue.c \
 	mapset.c \
 	output_forks.c \
+	paths.c \
 	ants.c \
 	free_error.c \
 	main.c \

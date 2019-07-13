@@ -42,6 +42,12 @@ typedef struct	s_queue
 	t_node *rear;
 }				t_queue;
 
+typedef struct	s_paths
+{
+	size_t	length;
+	t_node	*path;
+}				t_paths;
+
 typedef struct	s_links
 {
 	int				level;
@@ -78,13 +84,14 @@ t_links			*init_links(size_t count);
 int				get_links(t_lem_in *lem_in);
 int				not_in(size_t k, t_node *n);
 void			bfs(t_lem_in *lem_in);
-// void			move_ants(t_lem_in *lem_in, t_node *path);
 int				check_points(t_lem_in *lem_in, size_t count, char *line, t_room *room);
 int				free_error(t_lem_in *lem_in, t_room *room, char *line, t_node *path);
 t_node			*unlist(t_node *prev, t_node *node, t_node **ls);
 void			iterate_dead(t_links *links, size_t start);
 void			iterate_input(t_links *links, size_t start);
 void   			iterate_output(t_links *links, size_t start);
+t_paths			**make_paths(t_links *links, size_t start);
+void			move_ants(t_lem_in *lem_in, t_paths **paths);
 
 /*
 **	UTILS

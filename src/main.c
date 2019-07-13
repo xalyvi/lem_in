@@ -13,6 +13,28 @@
 #include "lem_in.h"
 #include <stdio.h>
 
+void	print_paths(t_paths **paths, size_t size)
+{
+	size_t	i;
+	t_node	*node;
+
+	i = 0;
+	while (i < size)
+	{
+		printf("path length: %zu\n", paths[i]->length);
+		node = paths[i]->path;
+		while (node)
+		{
+			if (node->next)
+				printf("%zu->", node->key);
+			else
+				printf("%zu\n", node->key);
+			node = node->next;
+		}
+		i++;
+	}
+}
+
 void	print_levels(t_lem_in *lem_in)
 {
 	t_node	*node;
@@ -45,6 +67,7 @@ void	print_levels(t_lem_in *lem_in)
 int	main(void)
 {
 	char		*line;
+	t_paths		**paths;
 	uintmax_t	ants;
 	t_lem_in	*lem_in;
 
@@ -68,8 +91,10 @@ int	main(void)
 	if (!get_links(lem_in))
 		return (0);
 	bfs(lem_in);
-	print_levels(lem_in);
+	paths = make_paths(lem_in->links, lem_in->start);
+	//print_levels(lem_in);
+	//print_paths(paths, lem_in->links[lem_in->start].o);
 	write(1, "\n", 1);
-	//move_ants(lem_in, path);
+	move_ants(lem_in, paths);
 	return (0);
 }
