@@ -39,19 +39,19 @@ static void	create_path(t_paths *paths, t_links *links, size_t key)
 	t_node	*node;
 	t_node	*prev;
 
+	prev = NULL;
 	while (1)
 	{
 		paths->length++;
 		node = (t_node *)malloc(sizeof(t_node));
 		node->ant = 0;
 		node->key = key;
-		node->next = NULL;
-		if (paths->path == NULL)
-			paths->path = node;
-		else
-			prev->next = node;
+		node->next = prev;
 		if (links[key].level == INT_MAX)
+		{
+			paths->path = node;
 			break ;
+		}
 		prev = node;
 		key = links[key].output->key;
 	}
