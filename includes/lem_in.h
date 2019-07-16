@@ -77,6 +77,7 @@ size_t			dequeue(t_queue *q);
 size_t			peek(t_queue *q);
 int				is_empty(t_queue *q);
 
+t_lem_in		*init_lem_in(void);
 t_lem_in		*get_rooms();
 void			free_all(t_lem_in *lem_in, t_room *room, char *line, t_paths **paths);
 int				check_room_er(t_lem_in *lem_in, t_room *node);

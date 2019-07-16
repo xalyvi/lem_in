@@ -42,6 +42,8 @@ void	print_levels(t_lem_in *lem_in)
 
 	n = 0;
 	write(1, "\n\n", 2);
+	printf("count: %zu, start: %zu, end: %zu\n", lem_in->count, lem_in->start, lem_in->end);
+	/*
 	while (n < lem_in->count)
 	{
 		printf("node: %s level: %d i: %zu o: %zu\n", lem_in->rooms[n]->name, lem_in->links[n].level, lem_in->links[n].i, lem_in->links[n].o);
@@ -62,6 +64,7 @@ void	print_levels(t_lem_in *lem_in)
 		printf("\n");
 		n++;
 	}
+	*/
 }
 
 int	main(void)
@@ -87,7 +90,7 @@ int	main(void)
 	}
 	ft_putendl(line);
 	if (line == NULL || !ft_isnumbers(line) || line[0] == '0')
-		return (free_error(NULL, NULL, NULL));
+		return (free_error(NULL, NULL, line));
 	ants = ft_atoi(line);
 	if (ants > 2147483647)
 		return (free_error(NULL, NULL, NULL));
@@ -97,9 +100,9 @@ int	main(void)
 	lem_in->ants = ants;
 	if (!get_links(lem_in))
 		return (0);
-	// if (!bfs(lem_in))
-	// 	return (free_error(lem_in, NULL, NULL));
-	// paths = make_paths(lem_in->links, lem_in->start);
+	if (!bfs(lem_in))
+		return (free_error(lem_in, NULL, NULL));
+	paths = make_paths(lem_in->links, lem_in->start);
 	// print_levels(lem_in);
 	// print_paths(paths, lem_in->links[lem_in->start].o);
 	write(1, "\n", 1);
