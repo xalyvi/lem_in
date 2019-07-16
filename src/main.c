@@ -68,33 +68,42 @@ int	main(void)
 {
 	char		*line;
 	t_paths		**paths;
-	uintmax_t	ants;
+	size_t		ants;
 	t_lem_in	*lem_in;
 
 	ants = 0;
 	line = NULL;
 	get_line(&line);
-	if (line)
+	if (!line)
+		return (free_error(NULL, NULL, NULL));
+	while (line[0] == '#' && line[1] != '#')
+	{
+		if (!line)
+			return (free_error(NULL, NULL, NULL));
 		ft_putendl(line);
+		free(line);
+		line = NULL;
+		get_line(&line);
+	}
+	ft_putendl(line);
 	if (line == NULL || !ft_isnumbers(line) || line[0] == '0')
-		return (free_error(NULL, NULL, NULL, NULL));
+		return (free_error(NULL, NULL, NULL));
 	ants = ft_atoi(line);
 	if (ants > 2147483647)
-		return (free_error(NULL, NULL, NULL, NULL));
+		return (free_error(NULL, NULL, NULL));
 	free(line);
 	if (!(lem_in = get_rooms()))
-	{
-		write(1, "\nreturn main (0)\n", 17);
 		return (0);
-	}
 	lem_in->ants = ants;
 	if (!get_links(lem_in))
 		return (0);
-	bfs(lem_in);
-	paths = make_paths(lem_in->links, lem_in->start);
-	//print_levels(lem_in);
-	//print_paths(paths, lem_in->links[lem_in->start].o);
+	// if (!bfs(lem_in))
+	// 	return (free_error(lem_in, NULL, NULL));
+	// paths = make_paths(lem_in->links, lem_in->start);
+	// print_levels(lem_in);
+	// print_paths(paths, lem_in->links[lem_in->start].o);
 	write(1, "\n", 1);
 	move_ants(lem_in, paths);
+	free_all(lem_in, NULL, NULL, paths);
 	return (0);
 }

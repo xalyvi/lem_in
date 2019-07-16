@@ -11,11 +11,22 @@ static void delete_others(t_links *links, size_t key, t_node *save)
     {
         if (node != save)
         {
-            unlist(prev, node, &(links[key].output));
+            if (!prev)
+                links[key].output = node->next;
+            else
+                prev->next = node->next;
+            free(node);
+            if (!prev)
+                node = links[key].output;
+            else
+                node = prev->next;
             links[key].o--;
         }
-        prev = node;
-        node = node->next;
+        else
+        {
+            prev = node;
+            node = node->next;
+        }
     }
 }
 

@@ -77,26 +77,22 @@ static t_room	*get_room(char *line, t_room **prev, size_t *count)
 static int		get_start_end(char **line, t_lem_in *lem_in,
 		int count)
 {
-	if (line[0][1] == '#')
+	if (ft_strcmp(*line, "##start") == 0)
 	{
-		if (ft_strcmp(*line, "##start") == 0)
-		{
-			if (!(lem_in->flags & 1) && (lem_in->flags |= 1))
-				lem_in->start = count;
-			else
-				return (1);
-		}
-		else if (ft_strcmp(*line, "##end") == 0)
-		{
-			if (!(lem_in->flags & 2) && (lem_in->flags |= 2))
-				lem_in->end = count;
-			else
-				return (1);
-		}
+		if (!(lem_in->flags & 1) && (lem_in->flags |= 1))
+			lem_in->start = count;
+		else
+			return (0);
+		return (1);
 	}
-	free(*line);
-	get_line(line);
-	ft_putendl(*line);
+	else if (ft_strcmp(*line, "##end") == 0)
+	{
+		if (!(lem_in->flags & 2) && (lem_in->flags |= 2))
+			lem_in->end = count;
+		else
+			return (0);
+		return (1);
+	}
 	return (0);
 }
 
@@ -118,14 +114,16 @@ t_lem_in		*get_rooms(void)
 		if (ft_strchr(line, '-'))
 			break ;
 		if (line[0] == '#')
-			if (get_start_end(&line, lem_in, count))
-				return ((!free_error(lem_in, prev, line, NULL)) ? NULL : NULL);
-		if (!(node = get_room(line, &prev, &count)))
-			return ((!free_error(lem_in, prev, line, NULL)) ? NULL : NULL);
+		{
+			if (line[1] == '#' && !get_start_end(&line, lem_in, count))
+				return ((!free_error(lem_in, prev, line)) ? NULL : NULL);
+		}
+		else if (!(node = get_room(line, &prev, &count)))
+			return ((!free_error(lem_in, prev, line)) ? NULL : NULL);
 		free(line);
+		line = NULL;
 		if (!check_room_er(lem_in, node))
 			return (NULL);
-		line = NULL;
 	}
 	if (!check_points(lem_in, count, line, node))
 		return (NULL);

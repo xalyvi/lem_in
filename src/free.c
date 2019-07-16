@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "lem_in.h"
+#include <stdio.h>
 
 static void free_rooms(t_room **rooms, size_t size)
 {
@@ -45,24 +46,40 @@ static void free_links(t_links *links, size_t size)
 			free(links[i].input);
 			links[i].input = t_link;
 		}
+		while (links[i].output)
+		{
+			t_link = links[i].output->next;
+			free(links[i].output);
+			links[i].output = t_link;
+		}
 		i++;
 	}
 	free(links);
 }
 
-static void free_path(t_node *path)
+static void free_path(t_paths **paths, size_t s)
 {
-	t_node *temp;
+	t_node *node;
+	t_node	*tmp;
+	size_t	i;
 
-	while (path)
+	i = 0;
+	while (i < s)
 	{
-		temp = path->next;
-		free(path);
-		path = temp;
+		node = paths[i]->path;
+		while (node)
+		{
+			tmp = node->next;
+			free(node);
+			node = tmp;
+		}
+		free(paths[i]);
+		i++;
 	}
+	free(paths);
 }
 
-int			free_error(t_lem_in *lem_in, t_room *room, char *line, t_node *path)
+void		free_all(t_lem_in *lem_in, t_room *room, char *line, t_paths **paths)
 {
 	t_room *t_room;
 
@@ -77,6 +94,8 @@ int			free_error(t_lem_in *lem_in, t_room *room, char *line, t_node *path)
 			free(room);
 			room = t_room;
 		}
+	if (paths)
+		free_path(paths, lem_in->links[lem_in->start].o);
 	if (lem_in)
 	{
 		if (lem_in->rooms)
@@ -87,8 +106,11 @@ int			free_error(t_lem_in *lem_in, t_room *room, char *line, t_node *path)
 			free(lem_in->line);
 		free(lem_in);
 	}
-	if (path)
-		free_path(path);
+}
+
+int			free_error(t_lem_in *lem_in, t_room *room, char *line)
+{
+	free_all(lem_in, room, line, NULL);
 	write(1, "error\n", 6);
 	return (0);
 }

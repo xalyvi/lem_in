@@ -12,24 +12,38 @@
 
 #include "lem_in.h"
 
-static void	set_link(t_links *link, size_t a)
+static t_node	*cr_node(size_t key)
 {
-	t_node	*m;
+	t_node	*node;
+
+	node = (t_node *)malloc(sizeof(t_node));
+	node->key = key;
+	node->ant = 0;
+	node->next = NULL;
+	return (node);
+}
+
+static void	set_link(t_links *link, size_t key)
+{
 	t_node	*j;
 
-	m = (t_node *)malloc(sizeof(t_node));
-	m->key = a;
-	m->ant = 0;
-	m->next = NULL;
-	j = link->input;
-	if (!j)
+	if (!(link->input))
 	{
-		link->input = m;
+		link->input = cr_node(key);
 		return ;
 	}
-	while (j->next)
+	j = link->input;
+	while (j)
+	{
+		if (j->key == key)
+			return ;
+		if (j->next == NULL)
+		{
+			j->next = cr_node(key);
+			return ;
+		}
 		j = j->next;
-	j->next = m;
+	}
 }
 
 static int	find_graph(t_lem_in *lem_in, size_t	dash)
@@ -79,7 +93,7 @@ int			get_links(t_lem_in *lem_in)
 {
 	lem_in->links = init_links(lem_in->count);
 	if (!get_names(lem_in))
-		return (free_error(lem_in, NULL, NULL, NULL));
+		return (free_error(lem_in, NULL, NULL));
 	free(lem_in->line);
 	while (get_line(&(lem_in->line)))
 	{
@@ -87,13 +101,12 @@ int			get_links(t_lem_in *lem_in)
 		if (lem_in->line[0] == '#')
 		{
 			if (lem_in->line[1] == '#')
-				return (free_error(lem_in, NULL, NULL, NULL));
-			free(lem_in->line);
-			continue;
+				return (free_error(lem_in, NULL, NULL));
 		}
-		if (!get_names(lem_in))
-			return (free_error(lem_in, NULL, NULL, NULL));
+		else if (!get_names(lem_in))
+			return (free_error(lem_in, NULL, NULL));
 		free(lem_in->line);
 	}
+	lem_in->line = NULL;
 	return (1);
 }

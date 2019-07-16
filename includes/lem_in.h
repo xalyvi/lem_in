@@ -78,14 +78,14 @@ size_t			peek(t_queue *q);
 int				is_empty(t_queue *q);
 
 t_lem_in		*get_rooms();
-void			*free_all(t_lem_in *lem_in, t_room *list, int ap);
+void			free_all(t_lem_in *lem_in, t_room *room, char *line, t_paths **paths);
 int				check_room_er(t_lem_in *lem_in, t_room *node);
 t_links			*init_links(size_t count);
 int				get_links(t_lem_in *lem_in);
 int				not_in(size_t k, t_node *n);
-void			bfs(t_lem_in *lem_in);
+int				bfs(t_lem_in *lem_in);
 int				check_points(t_lem_in *lem_in, size_t count, char *line, t_room *room);
-int				free_error(t_lem_in *lem_in, t_room *room, char *line, t_node *path);
+int				free_error(t_lem_in *lem_in, t_room *room, char *line);
 t_node			*unlist(t_node *prev, t_node *node, t_node **ls);
 void			iterate_dead(t_links *links, size_t start);
 void			iterate_input(t_links *links, size_t start);

@@ -5,6 +5,7 @@ static void	find_i_fork(t_links *links, size_t s, size_t p)
 {
 	t_node	*node;
 	t_node	*prev;
+	t_node	*fr;
 
 	while (links[s].o == 1)
 	{
@@ -21,7 +22,6 @@ static void	find_i_fork(t_links *links, size_t s, size_t p)
 		node = node->next;
 	}
 	free(unlist(prev, node, &(links[s].output)));
-	printf("\n");
 	links[s].o--;
 }
 
@@ -41,17 +41,22 @@ static void	deleto_end(t_links *links, size_t s, size_t p)
 {
 	t_node	*node;
 	t_node	*prev;
+	t_node	*tmp;
 
-	prev = NULL;
 	if (links[s].o > 1)
 	{
+		prev = NULL;
 		node = links[s].output;
 		while (node->key != p)
 		{
 			prev = node;
 			node = node->next;
 		}
-		free(unlist(prev, node, &(links[s].output)));
+		if (!prev)
+			links[s].output = node->next;
+		else
+			prev->next = node->next;
+		free(node);
 		links[s].o--;
 		return ;
 	}
@@ -67,11 +72,11 @@ void		iterate_dead(t_links *links, size_t start)
 {
 	t_node	*node;
 
-	node = links[start].output;
 	if (links[start].level == INT_MAX)
 		return ;
 	if (links[start].o > 0)
 	{
+		node = links[start].output;
 		while (node)
 		{
 			iterate_dead(links, node->key);

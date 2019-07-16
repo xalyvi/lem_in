@@ -13,7 +13,7 @@ SRC = utils/get_line.c \
 	output_forks.c \
 	paths.c \
 	ants.c \
-	free_error.c \
+	free.c \
 	main.c \
 
 OBJ = $(SRC:.c=.o)
@@ -27,7 +27,7 @@ OBJS = $(addprefix $(OBJDIR)/, $(OBJ))
 INCLUDES = -I ./includes
 
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS =
 
 NAME = lem-in
 
