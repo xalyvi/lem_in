@@ -80,6 +80,7 @@ int				is_empty(t_queue *q);
 t_lem_in		*init_lem_in(void);
 t_lem_in		*get_rooms();
 void			free_all(t_lem_in *lem_in, t_room *room, char *line, t_paths **paths);
+int				check_coord(char const *line, int for_what);
 int				check_room_er(t_lem_in *lem_in, t_room *node);
 t_links			*init_links(size_t count);
 int				get_links(t_lem_in *lem_in);
@@ -100,7 +101,7 @@ void			move_ants(t_lem_in *lem_in, t_paths **paths);
 
 int				get_line(char **line);
 int				ft_isnumbers(const char *str);
-uintmax_t		ft_atoi(const char *str);
+long			ft_atoi(const char *str);
 void			ft_putchar(char c);
 void			ft_putnbr(int nb);
 void			ft_putstr(char *str);

@@ -12,6 +12,31 @@
 
 #include "lem_in.h"
 
+int			check_coord(char const *line, int for_what)
+{
+	if (*line == '-')
+		line++;
+	if (*line == '\0' || !(*line >= '0' && *line <= '9'))
+		return (0);
+	while (*line >= '0' && *line <= '9')
+		line++;
+	if (for_what == 1)
+	{
+		if (*line != ' ')
+			return (0);
+		else
+			return (1);
+	}
+	else
+	{
+		if (*line != '\0')
+			return (0);
+		else
+			return (1);
+	}
+
+}
+
 t_lem_in	*init_lem_in(void)
 {
 	t_lem_in	*lem_in;

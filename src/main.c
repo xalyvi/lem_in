@@ -89,7 +89,7 @@ int	main(void)
 		get_line(&line);
 	}
 	ft_putendl(line);
-	if (line == NULL || !ft_isnumbers(line) || line[0] == '0')
+	if (line == NULL || !ft_isnumbers(line) || line[0] == '0' || line[0] == '-')
 		return (free_error(NULL, NULL, line));
 	ants = ft_atoi(line);
 	if (ants > 2147483647)
@@ -102,11 +102,11 @@ int	main(void)
 		return (0);
 	if (!bfs(lem_in))
 		return (free_error(lem_in, NULL, NULL));
-	paths = make_paths(lem_in->links, lem_in->start);
+	// paths = make_paths(lem_in->links, lem_in->start);
 	// print_levels(lem_in);
 	// print_paths(paths, lem_in->links[lem_in->start].o);
 	write(1, "\n", 1);
-	move_ants(lem_in, paths);
-	free_all(lem_in, NULL, NULL, paths);
+	// move_ants(lem_in, paths);
+	free_all(lem_in, NULL, NULL, NULL);
 	return (0);
 }

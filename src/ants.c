@@ -22,7 +22,7 @@ static size_t	algol(t_paths **paths, size_t c)
 	i = 0;
 	while (i < c)
 	{
-		sum = paths[c]->length - paths[i]->length;
+		sum += paths[c]->length - paths[i]->length;
 		i++;
 	}
 	return (sum);

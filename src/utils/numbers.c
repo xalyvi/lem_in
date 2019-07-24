@@ -26,17 +26,21 @@ int			ft_isnumbers(const char *str)
 	return (1);
 }
 
-uintmax_t	ft_atoi(const char *str)
+long	ft_atoi(const char *str)
 {
-	uintmax_t	nbr;
+	long	nbr;
+	long	sign;
 
 	nbr = 0;
+	sign = (*str == '-') ? -1 : 1;
+	if (*str == '-' || *str == '+')
+		str++;
 	while (*str >= '0' && *str <= '9')
 	{
 		nbr = nbr * 10 + (*str - '0');
 		str++;
 	}
-	return (nbr);
+	return (nbr * sign);
 }
 
 void		ft_putchar(char c)

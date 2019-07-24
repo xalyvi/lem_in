@@ -14,23 +14,28 @@
 
 static int		get_coord(char const *line, t_room *node)
 {
-	if (*line == '\0' || *(line + 1) == '\0' ||
-			(*(line + 1) == '0' && *(line + 2) != ' '))
+	long	n;
+	int		i;
+
+	i = 0;
+	if (!check_coord(line, 1))
 		return (0);
 	else
-		node->x = ft_atoi(++line);
-	while (*line >= '0' && *line <= '9')
+		n = ft_atoi(line);
+	if (n > INT_MAX || n < INT_MIN)
+		return (0);
+	node->x = n;
+	while ((*line >= '0' && *line <= '9') || *line == '-')
 		line++;
-	if (*line == '\0' || *(line + 1) == '\0' ||
-			(*(line + 1) == '0' && *(line + 2) != '\0'))
+	line++;
+	if (!check_coord(line, 2))
 		return (0);
 	else
-		node->y = ft_atoi(++line);
-	while (*line >= '0' && *line <= '9')
-		line++;
-	if (*line == '\0')
-		return (1);
-	return (0);
+		n = ft_atoi(line);
+	if (n > INT_MAX || n < INT_MIN)
+		return (0);
+	node->y = n;
+	return (1);
 }
 
 static t_room	*get_room(char const *line, t_room **prev, size_t *count)
@@ -48,8 +53,9 @@ static t_room	*get_room(char const *line, t_room **prev, size_t *count)
 	if (!(node = (t_room *)malloc(sizeof(t_room))))
 		return (NULL);
 	node->name = ft_strsub(line, 0, name);
-	if (!get_coord(line + name, node))
+	if (*(line + name) != ' ' || !get_coord(line + name + 1, node))
 	{
+		free(node->name);
 		free(node);
 		return (NULL);
 	}

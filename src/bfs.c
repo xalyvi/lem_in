@@ -72,10 +72,12 @@ static void	input_output(t_lem_in *lem_in)
 	}
 }	
 
-static void	assign_levels(t_queue *q,t_lem_in *lem_in, int n)
+static int	assign_levels(t_queue *q,t_lem_in *lem_in, int n)
 {
+	int		end;
 	t_node	*node;
 
+	end = 0;
 	node = lem_in->links[n].input;
 	while (node)
 	{
@@ -83,9 +85,11 @@ static void	assign_levels(t_queue *q,t_lem_in *lem_in, int n)
 		{
 			enqueue(q, node->key);
 			lem_in->links[node->key].level = lem_in->links[n].level + 1;
-		}
+		} else if (lem_in->links[node->key].level == INT_MAX)
+			end = 1;
 		node = node->next;
 	}
+	return (end);
 }
 
 int			bfs(t_lem_in *lem_in)
@@ -103,16 +107,14 @@ int			bfs(t_lem_in *lem_in)
 	{
 		n = dequeue(q);
 		if (lem_in->links[n].level != INT_MAX)
-			assign_levels(q, lem_in, n);
-		else
-			rt = 1;
+			rt += assign_levels(q, lem_in, n);
 	}
 	free(q);
-	if (rt)
+	if (!rt)
 		return (free_error(lem_in, NULL, NULL));
 	input_output(lem_in);
 	iterate_dead(lem_in->links, lem_in->start);
-	iterate_input(lem_in->links, lem_in->start);
-	iterate_output(lem_in->links, lem_in->end);
+	// iterate_input(lem_in->links, lem_in->start);
+	// iterate_output(lem_in->links, lem_in->end);
 	return (1);
 }
