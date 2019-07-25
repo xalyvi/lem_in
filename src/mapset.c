@@ -72,7 +72,6 @@ static void	deleto_end(t_links *links, size_t s, size_t p)
 void		iterate_dead(t_links *links, size_t start)
 {
 	t_node	*node;
-	t_node	*next;
 
 	if (links[start].level == INT_MAX)
 		return ;
@@ -82,10 +81,8 @@ void		iterate_dead(t_links *links, size_t start)
 		node = links[start].output;
 		while (node)
 		{
-			next = node->next;
-			printf("from o: %zu %zu\n", links[start].o, start);
 			iterate_dead(links, node->key);
-			node = next;
+			node = node->next;
 		}
 		return ;
 	}
