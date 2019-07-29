@@ -102,11 +102,11 @@ int	main(void)
 		return (0);
 	if (!bfs(lem_in))
 		return (free_error(lem_in, NULL, NULL));
-	// paths = make_paths(lem_in->links, lem_in->start);
-	// print_levels(lem_in);
-	// print_paths(paths, lem_in->links[lem_in->start].o);
+	paths = make_paths(lem_in->links, lem_in->start);
+	print_levels(lem_in);
+	print_paths(paths, lem_in->links[lem_in->start].o);
 	write(1, "\n", 1);
-	// move_ants(lem_in, paths);
-	free_all(lem_in, NULL, NULL, NULL);
+	move_ants(lem_in, paths);
+	free_all(lem_in, NULL, NULL, paths);
 	return (0);
 }

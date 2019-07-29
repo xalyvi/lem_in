@@ -113,8 +113,9 @@ int			bfs(t_lem_in *lem_in)
 	if (!rt)
 		return (free_error(lem_in, NULL, NULL));
 	input_output(lem_in);
-	iterate_dead(lem_in->links, lem_in->start);
-	// iterate_input(lem_in->links, lem_in->start);
-	// iterate_output(lem_in->links, lem_in->end);
+	iterate_dead(lem_in->links, lem_in->vis, lem_in->start);
+	// vis_zer(lem_in->vis, lem_in->count);
+	iterate_input(lem_in->links, lem_in->start);
+	iterate_output(lem_in->links, lem_in->end);
 	return (1);
 }

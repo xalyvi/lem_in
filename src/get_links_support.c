@@ -26,6 +26,7 @@ t_links	*init_links(size_t count)
 		links[i].o = 0;
 		links[i].input = NULL;
 		links[i].output = NULL;
+		links[i].fl = 0;
 		i++;
 	}
 	return (links);

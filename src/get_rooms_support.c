@@ -49,6 +49,7 @@ t_lem_in	*init_lem_in(void)
 	lem_in->line = NULL;
 	lem_in->links = NULL;
 	lem_in->rooms = NULL;
+	lem_in->vis = NULL;
 	return (lem_in);
 }
 
@@ -60,6 +61,8 @@ static int	enter_rooms(t_lem_in *lem_in, t_room *node)
 					* (lem_in->count))))
 		return (free_error(lem_in, node, NULL));
 	i = lem_in->count - 1;
+	lem_in->vis = (char *)malloc(sizeof(char) * lem_in->count);
+	vis_zer(lem_in->vis, lem_in->count);
 	while (i > -1)
 	{
 		lem_in->rooms[i] = node;

@@ -45,7 +45,8 @@ static void	deleto_end(t_links *links, size_t s, size_t p)
 
 	if (links[s].o > 1)
 	{
-		printf("delet o: %zu %zu\n", links[s].o, s);
+		if (links[s].o > 2)
+			links[s].fl = 1;
 		prev = NULL;
 		node = links[s].output;
 		while (node->key != p)
@@ -69,24 +70,30 @@ static void	deleto_end(t_links *links, size_t s, size_t p)
 	}
 }
 
-void		iterate_dead(t_links *links, size_t start)
+void		iterate_dead(t_links *links, char *vis, size_t start)
 {
 	t_node	*node;
 
 	if (links[start].level == INT_MAX)
 		return ;
-	printf("node: o: %zu %zu\n", links[start].o, start);
+	vis[start] = 1;
 	if (links[start].o > 0)
 	{
 		node = links[start].output;
 		while (node)
 		{
-			iterate_dead(links, node->key);
-			node = node->next;
+			if (vis[node->key] != 1)
+				iterate_dead(links, vis, node->key);
+			if (links[start].fl == 1)
+			{
+				node = links[start].output;
+				links[start].fl = 0;
+			}
+			else
+				node = node->next;
 		}
 		return ;
 	}
-	printf("Here %zu\n", start);
 	deleto_end(links, start, 0);
 }
 

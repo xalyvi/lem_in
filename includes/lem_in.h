@@ -55,6 +55,7 @@ typedef struct	s_links
 	size_t			o;
 	t_node			*input;
 	t_node			*output;
+	char			fl;
 }				t_links;
 
 typedef struct	s_lem_in
@@ -67,6 +68,7 @@ typedef struct	s_lem_in
 	size_t			start;
 	size_t			end;
 	unsigned char	flags;
+	char			*vis;
 	t_links			*links;
 	t_room			**rooms;
 }				t_lem_in;
@@ -78,18 +80,18 @@ size_t			peek(t_queue *q);
 int				is_empty(t_queue *q);
 
 t_lem_in		*init_lem_in(void);
+void			vis_zer(char *vis, size_t n);
 t_lem_in		*get_rooms();
 void			free_all(t_lem_in *lem_in, t_room *room, char *line, t_paths **paths);
 int				check_coord(char const *line, int for_what);
 int				check_room_er(t_lem_in *lem_in, t_room *node);
 t_links			*init_links(size_t count);
 int				get_links(t_lem_in *lem_in);
-int				not_in(size_t k, t_node *n);
 int				bfs(t_lem_in *lem_in);
 int				check_points(t_lem_in *lem_in, size_t count, char *line, t_room *room);
 int				free_error(t_lem_in *lem_in, t_room *room, char *line);
 t_node			*unlist(t_node *prev, t_node *node, t_node **ls);
-void			iterate_dead(t_links *links, size_t start);
+void			iterate_dead(t_links *links, char *vis, size_t start);
 void			iterate_input(t_links *links, size_t start);
 void   			iterate_output(t_links *links, size_t start);
 t_paths			**make_paths(t_links *links, size_t start);
