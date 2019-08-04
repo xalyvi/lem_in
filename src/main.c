@@ -103,8 +103,8 @@ int	main(void)
 	if (!bfs(lem_in))
 		return (free_error(lem_in, NULL, NULL));
 	paths = make_paths(lem_in->links, lem_in->start);
-	print_levels(lem_in);
-	print_paths(paths, lem_in->links[lem_in->start].o);
+	// print_levels(lem_in);
+	// print_paths(paths, lem_in->links[lem_in->start].o);
 	write(1, "\n", 1);
 	move_ants(lem_in, paths);
 	free_all(lem_in, NULL, NULL, paths);

@@ -1,7 +1,7 @@
 #include "lem_in.h"
 #include <stdio.h>
 
-static void	find_i_fork(t_links *links, size_t s, size_t p)
+static int	find_i_fork(t_links *links, size_t s, size_t p)
 {
 	t_node	*node;
 	t_node	*prev;
@@ -12,7 +12,7 @@ static void	find_i_fork(t_links *links, size_t s, size_t p)
 		p = s;
 		s = links[s].input->key;
 		if (links[s].level == 0)
-			return ;
+			return (1);
 	}
 	node = links[s].output;
 	prev = NULL;
@@ -23,17 +23,28 @@ static void	find_i_fork(t_links *links, size_t s, size_t p)
 	}
 	free(unlist(prev, node, &(links[s].output)));
 	links[s].o--;
+	return (0);
 }
 
-static void	deleto_input(t_links *links, size_t s)
+static void	deleto_input(t_links *links, size_t s, size_t start)
 {
 	t_node	*node;
+	t_node	*prev;
 
 	node = links[s].input;
+	prev = NULL;
 	while (node)
 	{
-		find_i_fork(links, node->key, s);
-		node = node->next;
+		if (find_i_fork(links, node->key, s))
+		{
+			delete_any_other(links, s, start);
+			return ;
+		}
+		else
+		{
+			unlist(node, NULL, &(links[s].input));
+			node = links[s].input;
+		}
 	}
 }
 
@@ -97,7 +108,7 @@ void		iterate_dead(t_links *links, char *vis, size_t start)
 	deleto_end(links, start, 0);
 }
 
-void		iterate_input(t_links *links, size_t start)
+void		iterate_input(t_links *links, size_t start, size_t s)
 {
 	t_node	*node;
 
@@ -105,11 +116,11 @@ void		iterate_input(t_links *links, size_t start)
 	if (links[start].level == INT_MAX)
 		return ;
 	if (links[start].i > 1)
-		deleto_input(links, start);
+		deleto_input(links, start, s);
 	node = links[start].output;
 	while (node)
 	{
-		iterate_input(links, node->key);
+		iterate_input(links, node->key, s);
 		node = node->next;
 	}
 }
