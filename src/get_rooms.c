@@ -15,9 +15,7 @@
 static int		get_coord(char const *line, t_room *node)
 {
 	long	n;
-	int		i;
 
-	i = 0;
 	if (!check_coord(line, 1))
 		return (0);
 	else
@@ -65,13 +63,13 @@ static t_room	*get_room(char const *line, t_room **prev, size_t *count)
 	return (node);
 }
 
-static t_room	*inroom(t_lem_in *lem_in, t_room **prev, const char *line, size_t *count)
+static t_room	*inroom(t_room **prev, const char *line, size_t *count)
 {
 	t_room	*room;
 
 	if (!(room = get_room(line, prev, count)))
 		return (NULL);
-	else if (!check_room_er(lem_in, room))
+	else if (!check_room_er(room))
 		return (NULL);
 	return (room);
 }
@@ -79,7 +77,6 @@ static t_room	*inroom(t_lem_in *lem_in, t_room **prev, const char *line, size_t 
 static t_room	*get_start_end(char **line, t_lem_in *lem_in,
 		size_t *count, t_room **prev)
 {
-	t_node	*node;
 
 	if (ft_strcmp(*line, "##start") == 0)
 	{
@@ -100,7 +97,7 @@ static t_room	*get_start_end(char **line, t_lem_in *lem_in,
 	free(*line);
 	get_line(line);
 	ft_putendl(*line);
-	return (inroom(lem_in, prev, *line, count));
+	return (inroom(prev, *line, count));
 }
 
 t_lem_in		*get_rooms(void)
@@ -126,7 +123,7 @@ t_lem_in		*get_rooms(void)
 			if (line[1] == '#' && !(node = get_start_end(&line, lem_in, &count, &prev)))
 				return ((!free_error(lem_in, prev, line)) ? NULL : NULL);
 		}
-		else if (!(node = inroom(lem_in, &prev, line, &count)))
+		else if (!(node = inroom(&prev, line, &count)))
 			return ((!free_error(lem_in, prev, line)) ? NULL : NULL);
 		free(line);
 		line = NULL;

@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "lem_in.h"
-#include <stdio.h>
 
 static void free_rooms(t_room **rooms, size_t size)
 {
@@ -111,6 +110,6 @@ void		free_all(t_lem_in *lem_in, t_room *room, char *line, t_paths **paths)
 int			free_error(t_lem_in *lem_in, t_room *room, char *line)
 {
 	free_all(lem_in, room, line, NULL);
-	write(1, "error\n", 6);
+	write(2, "ERROR\n", 6);
 	return (0);
 }

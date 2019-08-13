@@ -27,7 +27,7 @@ OBJS = $(addprefix $(OBJDIR)/, $(OBJ))
 INCLUDES = -I ./includes
 
 CC = gcc
-CFLAGS =
+CFLAGS = -Wall -Werror -Wextra
 
 NAME = lem-in
 

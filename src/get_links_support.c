@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "lem_in.h"
+#include <stdio.h>
 
 t_links			*init_links(size_t count)
 {
@@ -45,12 +46,12 @@ static void		delete(t_links *links, size_t s, size_t p)
 		node = node->next;
 	}
 	unlist(prev, node, &(links[s].output));
+	links[s].fl = 2;
 	links[s].o--;
 }
 
 static void		from_start(t_links *links, size_t n, size_t start, size_t m)
 {
-	size_t	len;
 	t_node	*node;
 	t_node	*prev;
 	size_t	s;
@@ -67,19 +68,23 @@ static void		from_start(t_links *links, size_t n, size_t start, size_t m)
 		}
 		s = node->key;
 		p = n;
-		len = 1;
 		while (s != start)
 		{
 			p = s;
-			s = links[s].output->key;
-			len++;
+			s = links[s].input->key;
 		}
 		delete(links, s, p);
-		unlist(node, prev, &(links[n].input));
 		if (!prev)
+		{
+			free(node);
 			node = links[n].input;
+		}
 		else
+		{
 			prev->next = node->next;
+			free(node);
+			node = prev->next;
+		}
 		links[n].i--;
 	}
 }
@@ -87,14 +92,12 @@ static void		from_start(t_links *links, size_t n, size_t start, size_t m)
 static int	step_into_the_arena(t_links *links, size_t s, size_t p, size_t start, size_t *res)
 {
 	size_t	len;
-	t_node	*node;
-	t_node	*prev;
 
 	len = 1;
-	while (links[s].o < 2 || s != start)
+	while (links[s].o == 1 && links[s].i > 0 && s != start)
 	{
 		p = s;
-		s = links[s].output->key;
+		s = links[s].input->key;
 		len++;
 	}
 	if (s == start)
@@ -103,6 +106,7 @@ static int	step_into_the_arena(t_links *links, size_t s, size_t p, size_t start,
 		return (0);
 	}
 	delete(links, s, p);
+	return (1);
 }
 
 void			delete_any_other(t_links *links, size_t n, size_t start)
@@ -121,11 +125,18 @@ void			delete_any_other(t_links *links, size_t n, size_t start)
 	{
 		if (step_into_the_arena(links, node->key, n, start, &len))
 		{
-			unlist(node, prev, &(links[n].input));
 			if (!prev)
+			{
+				links[n].input = node->next;
+				free(node);
 				node = links[n].input;
+			}
 			else
+			{
+				prev->next = node->next;
+				free(node);
 				node = prev->next;
+			}
 			links[n].i--;
 		}
 		else

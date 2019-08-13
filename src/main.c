@@ -43,29 +43,42 @@ void	print_levels(t_lem_in *lem_in)
 	n = 0;
 	write(1, "\n\n", 2);
 	printf("count: %zu, start: %zu, end: %zu\n", lem_in->count, lem_in->start, lem_in->end);
-	/*
 	while (n < lem_in->count)
 	{
-		printf("node: %s level: %d i: %zu o: %zu\n", lem_in->rooms[n]->name, lem_in->links[n].level, lem_in->links[n].i, lem_in->links[n].o);
+		printf("node: %zu level: %d i: %zu o: %zu\n", n, lem_in->links[n].level, lem_in->links[n].i, lem_in->links[n].o);
 		printf("\t inputs:");
 		node = lem_in->links[n].input;
 		while (node)
 		{
-			printf(" %s", lem_in->rooms[node->key]->name);
+			printf(" %zu", node->key);
 			node = node->next;
 		}
 		printf("\n\toutputs:");
 		node = lem_in->links[n].output;
 		while (node)
 		{
-			printf(" %s", lem_in->rooms[node->key]->name);
+			printf(" %zu", node->key);
 			node = node->next;
 		}
 		printf("\n");
 		n++;
 	}
-	*/
 }
+/*
+ *	TODO: Whitespaces in between nodes and at the end of file
+ *	TODO: check name for illegal symbols
+ *	TODO: link duplicates (and linking to itself) ???
+ *	TODO: remove '\n' at the end of lines
+ *
+ *	maps to check:
+ *	/mpps/maps3/subject_map
+ *	/test/test1
+ *	/test/test7
+ *	test_ing/maps/in0
+ *	test_ing/maps/input1
+ *	test_ing/maps/map42
+ *	more-tests/10_lots_of_comments.map
+ */
 
 int	main(void)
 {
@@ -101,7 +114,7 @@ int	main(void)
 	if (!get_links(lem_in))
 		return (0);
 	if (!bfs(lem_in))
-		return (free_error(lem_in, NULL, NULL));
+		return (0);
 	paths = make_paths(lem_in->links, lem_in->start);
 	// print_levels(lem_in);
 	// print_paths(paths, lem_in->links[lem_in->start].o);
