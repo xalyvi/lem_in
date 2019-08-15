@@ -95,7 +95,15 @@ static t_room	*get_start_end(char **line, t_lem_in *lem_in,
 	else
 		return (NULL);
 	free(*line);
-	get_line(line);
+	*line = NULL;
+	while (get_line(line) && *line && *line[0] == '#')
+	{
+		ft_putendl(*line);
+		if (ft_strncmp(*line, "##", 2) == 0)
+			return (NULL);
+		free(*line);
+		*line = NULL;
+	}
 	ft_putendl(*line);
 	return (inroom(prev, *line, count));
 }
@@ -113,6 +121,7 @@ t_lem_in		*get_rooms(void)
 	count = 0;
 	prev = NULL;
 	node = NULL;
+	line = NULL;
 	while (get_line(&line))
 	{
 		ft_putendl(line);

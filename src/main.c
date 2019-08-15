@@ -68,16 +68,17 @@ void	print_levels(t_lem_in *lem_in)
  *	TODO: Whitespaces in between nodes and at the end of file
  *	TODO: check name for illegal symbols
  *	TODO: link duplicates (and linking to itself) ???
- *	TODO: remove '\n' at the end of lines
+ *	TODO: test again all maps with comments
+ *	TODO: norminette and refactor
  *
  *	maps to check:
+ *	@(bad path trimming)
  *	/mpps/maps3/subject_map
  *	/test/test1
  *	/test/test7
  *	test_ing/maps/in0
  *	test_ing/maps/input1
  *	test_ing/maps/map42
- *	more-tests/10_lots_of_comments.map
  */
 
 int	main(void)

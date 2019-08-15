@@ -32,8 +32,10 @@ static size_t	move(t_paths *p, t_room **rooms, size_t m)
 {
 	t_node	*node;
 	size_t	rt;
+	char	pr;
 
 	rt = 0;
+	pr = 0;
 	node = p->path;
 	if ((m > 0 && !(node->next)) || (node->next && node->next->ant > 0))
 		rt++;
@@ -45,12 +47,16 @@ static size_t	move(t_paths *p, t_room **rooms, size_t m)
 			node->ant = m;
 		if (node->ant > 0)
 		{
+			if (pr)
+				write(1, " ", 1);
 			write(1, "L", 1);
 			ft_putnbr(node->ant);
 			write(1, "-", 1);
 			ft_putstr(rooms[node->key]->name);
-			write(1, " ", 1);
+			pr = 1;
 		}
+		else
+			pr = 0;
 		node = node->next;
 	}
 	return (rt);
