@@ -81,6 +81,29 @@ void	print_levels(t_lem_in *lem_in)
  *	test_ing/maps/map42
  */
 
+static char	*read_ants_number(void)
+{
+	char	*line;
+
+	line = NULL;
+	get_line(&line);
+	if (!line)
+		return (free_error(NULL, NULL, NULL) ? NULL : NULL);
+	while (line[0] == '#' && line[1] != '#')
+	{
+		if (!line)
+			return (free_error(NULL, NULL, NULL) ? NULL : NULL);
+		ft_putendl(line);
+		free(line);
+		line = NULL;
+		get_line(&line);
+	}
+	ft_putendl(line);
+	if (line == NULL || !ft_isnumbers(line) || line[0] == '0' || line[0] == '-')
+		return (free_error(NULL, NULL, line) ? NULL : NULL);
+	return (line);
+}
+
 int	main(void)
 {
 	char		*line;
@@ -90,26 +113,13 @@ int	main(void)
 
 	ants = 0;
 	line = NULL;
-	get_line(&line);
-	if (!line)
-		return (free_error(NULL, NULL, NULL));
-	while (line[0] == '#' && line[1] != '#')
-	{
-		if (!line)
-			return (free_error(NULL, NULL, NULL));
-		ft_putendl(line);
-		free(line);
-		line = NULL;
-		get_line(&line);
-	}
-	ft_putendl(line);
-	if (line == NULL || !ft_isnumbers(line) || line[0] == '0' || line[0] == '-')
-		return (free_error(NULL, NULL, line));
+	if (!(line = read_ants_number()))
+		return (0);
 	ants = ft_atoi(line);
 	if (ants > 2147483647)
 		return (free_error(NULL, NULL, NULL));
 	free(line);
-	if (!(lem_in = get_rooms()))
+	if (!(lem_in = get_rooms(0)))
 		return (0);
 	lem_in->ants = ants;
 	if (!get_links(lem_in))
@@ -117,8 +127,10 @@ int	main(void)
 	if (!bfs(lem_in))
 		return (0);
 	paths = make_paths(lem_in->links, lem_in->start);
-	// print_levels(lem_in);
-	// print_paths(paths, lem_in->links[lem_in->start].o);
+	/*
+	 *	print_levels(lem_in);
+	 *	print_paths(paths, lem_in->links[lem_in->start].o);
+	 */
 	write(1, "\n", 1);
 	move_ants(lem_in, paths);
 	free_all(lem_in, NULL, NULL, paths);

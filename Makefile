@@ -2,6 +2,7 @@ SRC = utils/get_line.c \
 	utils/numbers.c \
 	utils/string.c \
 	utils/string_more.c \
+	utls.c \
 	get_rooms.c \
 	get_links.c \
 	get_rooms_support.c \

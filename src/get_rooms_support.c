@@ -37,7 +37,7 @@ int			check_coord(char const *line, int for_what)
 
 }
 
-t_lem_in	*init_lem_in(void)
+t_lem_in	*init_lem_in(char **line, t_room **node, t_room **prev)
 {
 	t_lem_in	*lem_in;
 
@@ -49,6 +49,9 @@ t_lem_in	*init_lem_in(void)
 	lem_in->line = NULL;
 	lem_in->links = NULL;
 	lem_in->rooms = NULL;
+	*line = NULL;
+	*node = NULL;
+	*prev = NULL;
 	return (lem_in);
 }
 

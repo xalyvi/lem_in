@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "lem_in.h"
-#include <stdio.h>
 
 t_links			*init_links(size_t count)
 {

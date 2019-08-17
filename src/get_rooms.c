@@ -95,33 +95,20 @@ static t_room	*get_start_end(char **line, t_lem_in *lem_in,
 	else
 		return (NULL);
 	free(*line);
-	*line = NULL;
-	while (get_line(line) && *line && *line[0] == '#')
-	{
-		ft_putendl(*line);
-		if (ft_strncmp(*line, "##", 2) == 0)
-			return (NULL);
-		free(*line);
-		*line = NULL;
-	}
-	ft_putendl(*line);
+	if (!(*line = skip_comments()))
+		return (NULL);
 	return (inroom(prev, *line, count));
 }
 
-t_lem_in		*get_rooms(void)
+t_lem_in		*get_rooms(size_t count)
 {
 	char		*line;
 	t_lem_in	*lem_in;
 	t_room		*node;
 	t_room		*prev;
-	size_t		count;
 
-	if (!(lem_in = init_lem_in()))
+	if (!(lem_in = init_lem_in(&line, &node, &prev)))
 		return (NULL);
-	count = 0;
-	prev = NULL;
-	node = NULL;
-	line = NULL;
 	while (get_line(&line))
 	{
 		ft_putendl(line);
