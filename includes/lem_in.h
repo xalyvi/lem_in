@@ -56,7 +56,6 @@ typedef struct	s_links
 	t_node			*input;
 	t_node			*output;
 	char			vis;
-	char			fl;
 }				t_links;
 
 typedef struct	s_lem_in
@@ -86,6 +85,11 @@ void			free_all(t_lem_in *lem_in, t_room *room, char *line, t_paths **paths);
 int				check_coord(char const *line, int for_what);
 int				check_room_er(t_room *node);
 t_links			*init_links(size_t count);
+
+void			rotate_dead_links(t_links *links, size_t s, size_t p);
+void			rotate_input_links(t_links *links, size_t s, size_t start);
+
+
 int				get_links(t_lem_in *lem_in);
 int				bfs(t_lem_in *lem_in);
 void			iterate(t_links *links, size_t start, char vis, void (*function)(t_links *links, size_t n, size_t start));
@@ -98,7 +102,7 @@ int				free_error(t_lem_in *lem_in, t_room *room, char *line);
 t_node			*unlist(t_node *prev, t_node *node, t_node **ls);
 void			iterate_dead(t_links *links, size_t start);
 void			iterate_input(t_links *links, size_t start, size_t s);
-void			delete_any_other(t_links *links, size_t n, size_t start);
+void			delete_any_other(t_links *links, size_t n, size_t start, size_t len);
 t_paths			**make_paths(t_links *links, size_t start);
 void			move_ants(t_lem_in *lem_in, t_paths **paths);
 

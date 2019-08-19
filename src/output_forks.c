@@ -1,5 +1,21 @@
 #include "lem_in.h"
 
+static void	free_if(t_links *links, t_node **node, t_node **prev)
+{
+	if (!*prev)
+	{
+    	links->output = (*node)->next;
+		free(*node);
+		*node = links->output;
+	}
+    else
+	{
+        (*prev)->next = (*node)->next;
+		free(*node);
+		*node = (*prev)->next;
+	}
+}
+
 static void delete_others(t_links *links, size_t key, t_node *save)
 {
     t_node  *node;
@@ -11,15 +27,7 @@ static void delete_others(t_links *links, size_t key, t_node *save)
     {
         if (node != save)
         {
-            if (!prev)
-                links[key].output = node->next;
-            else
-                prev->next = node->next;
-            free(node);
-            if (!prev)
-                node = links[key].output;
-            else
-                node = prev->next;
+			free_if(links + key, &node, &prev);
             links[key].o--;
         }
         else
@@ -30,45 +38,14 @@ static void delete_others(t_links *links, size_t key, t_node *save)
     }
 }
 
-// void    iterate_output(t_links *links, size_t start)
-// {
-//     t_node  *node;
-//     t_node  *temp;
-//     size_t  key;
-//     size_t  len;
-//     size_t  cur;
-
-//     if (links[start].level == 0)
-//         return ;
-//     if (links[start].o > 1)
-//     {
-//         len = INT_MAX;
-//         temp = links[start].output;
-//         while (temp)
-//         {
-//             cur = 1;
-//             key = temp->key;
-//             while (links[key].level != INT_MAX)
-//             {
-//                 key = links[key].output->key;
-//                 cur++;
-//             }
-//             if (cur < len)
-//             {
-//                 len = cur;
-//                 node = temp;
-//             }
-//             temp = temp->next;
-//         }
-//         delete_others(links, start, node);
-//     }
-//     node = links[start].input;
-//     while (node)
-//     {
-//         iterate_output(links, node->key);
-//         node = node->next;
-//     }
-// }
+void        compare_to_in(size_t cur, size_t *len, t_node *temp, t_node **node)
+{
+    if (cur < *len)
+    {
+		*len = cur;
+        *node = temp;
+    }
+}
 
 void        find_o(t_links *links, size_t n)
 {
@@ -91,11 +68,7 @@ void        find_o(t_links *links, size_t n)
                 key = links[key].output->key;
                 cur++;
             }
-            if (cur < len)
-            {
-                len = cur;
-                node = temp;
-            }
+            compare_to_in(cur, &len, temp, &node);
             temp = temp->next;
         }
         delete_others(links, n, node);

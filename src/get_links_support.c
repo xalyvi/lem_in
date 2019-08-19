@@ -26,7 +26,6 @@ t_links			*init_links(size_t count)
 		links[i].o = 0;
 		links[i].input = NULL;
 		links[i].output = NULL;
-		links[i].fl = 0;
 		i++;
 	}
 	return (links);
@@ -45,8 +44,24 @@ static void		delete(t_links *links, size_t s, size_t p)
 		node = node->next;
 	}
 	unlist(prev, node, &(links[s].output));
-	links[s].fl = 2;
 	links[s].o--;
+}
+
+static void		free_node(t_node **node, t_node **prev, t_links *links)
+{
+	if (!*prev)
+	{
+		links->input = (*node)->next;
+		free(*node);
+		*node = links->input;
+	}
+	else
+	{
+		(*prev)->next = (*node)->next;
+		free(*node);
+		*node = (*prev)->next;
+	}
+	links->i--;
 }
 
 static void		from_start(t_links *links, size_t n, size_t start, size_t m)
@@ -73,22 +88,12 @@ static void		from_start(t_links *links, size_t n, size_t start, size_t m)
 			s = links[s].input->key;
 		}
 		delete(links, s, p);
-		if (!prev)
-		{
-			free(node);
-			node = links[n].input;
-		}
-		else
-		{
-			prev->next = node->next;
-			free(node);
-			node = prev->next;
-		}
+		free_node(&node, &prev, links + n);
 		links[n].i--;
 	}
 }
 
-static int	step_into_the_arena(t_links *links, size_t s, size_t p, size_t start, size_t *res)
+static int	find_start_or_if(t_links *links, size_t s, size_t p, size_t start, size_t *res)
 {
 	size_t	len;
 
@@ -108,36 +113,19 @@ static int	step_into_the_arena(t_links *links, size_t s, size_t p, size_t start,
 	return (1);
 }
 
-void			delete_any_other(t_links *links, size_t n, size_t start)
+void			delete_any_other(t_links *links, size_t n, size_t start, size_t len)
 {
 	size_t	m;
 	t_node	*node;
 	t_node	*prev;
-	size_t	len;
 	size_t	min;
 
-	len = 0;
 	node = links[n].input;
 	prev = NULL;
 	min = INT_MAX;
 	while (node)
-	{
-		if (step_into_the_arena(links, node->key, n, start, &len))
-		{
-			if (!prev)
-			{
-				links[n].input = node->next;
-				free(node);
-				node = links[n].input;
-			}
-			else
-			{
-				prev->next = node->next;
-				free(node);
-				node = prev->next;
-			}
-			links[n].i--;
-		}
+		if (find_start_or_if(links, node->key, n, start, &len))
+			free_node(&node, &prev, links + n);
 		else
 		{
 			if (len < min)
@@ -148,7 +136,6 @@ void			delete_any_other(t_links *links, size_t n, size_t start)
 			prev = node;
 			node = node->next;
 		}
-	}
 	if (links[n].i < 2)
 		return ;
 	from_start(links, n, start, m);

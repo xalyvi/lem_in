@@ -65,13 +65,18 @@ void	print_levels(t_lem_in *lem_in)
 	}
 }
 /*
- *	TODO: Whitespaces in between nodes and at the end of file
  *	TODO: check name for illegal symbols
  *	TODO: link duplicates (and linking to itself) ???
- *	TODO: test again all maps with comments
- *	TODO: norminette and refactor
+ *	TODO: '\n' at the end of lines	
+ *	TODO: norminette
+ *	TODO: ! Any unknown command will be ignored. !
+ *	TODO: author file
+ *	TODO: strerror() and perror()
  *
  *	maps to check:
+ *
+ *	mpps/maps/illegalname1
+ * 
  *	@(bad path trimming)
  *	/mpps/maps3/subject_map
  *	/test/test1
@@ -79,6 +84,8 @@ void	print_levels(t_lem_in *lem_in)
  *	test_ing/maps/in0
  *	test_ing/maps/input1
  *	test_ing/maps/map42
+ *	
+ *	Solution: it's all random! :)
  */
 
 static char	*read_ants_number(void)
@@ -127,10 +134,8 @@ int	main(void)
 	if (!bfs(lem_in))
 		return (0);
 	paths = make_paths(lem_in->links, lem_in->start);
-	/*
-	 *	print_levels(lem_in);
-	 *	print_paths(paths, lem_in->links[lem_in->start].o);
-	 */
+	// print_levels(lem_in);
+	// print_paths(paths, lem_in->links[lem_in->start].o);
 	write(1, "\n", 1);
 	move_ants(lem_in, paths);
 	free_all(lem_in, NULL, NULL, paths);

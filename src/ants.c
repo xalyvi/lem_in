@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "lem_in.h"
-#include <printf.h>
 
 static size_t	algol(t_paths **paths, size_t c)
 {
@@ -32,10 +31,8 @@ static size_t	move(t_paths *p, t_room **rooms, size_t m)
 {
 	t_node	*node;
 	size_t	rt;
-	char	pr;
 
 	rt = 0;
-	pr = 0;
 	node = p->path;
 	if ((m > 0 && !(node->next)) || (node->next && node->next->ant > 0))
 		rt++;
@@ -47,16 +44,12 @@ static size_t	move(t_paths *p, t_room **rooms, size_t m)
 			node->ant = m;
 		if (node->ant > 0)
 		{
-			if (pr)
-				write(1, " ", 1);
 			write(1, "L", 1);
 			ft_putnbr(node->ant);
 			write(1, "-", 1);
 			ft_putstr(rooms[node->key]->name);
-			pr = 1;
+			write(1, " ", 1);
 		}
-		else
-			pr = 0;
 		node = node->next;
 	}
 	return (rt);
@@ -77,11 +70,7 @@ void			move_ants(t_lem_in *lem_in, t_paths **paths)
 		i = 0;
 		while (i < c)
 		{
-			//printf("%zu > %zu\n", lem_in->ants - m, algol(paths, i));
 			end += move(paths[i], lem_in->rooms, ((lem_in->ants - m > algol(paths, i)) ? ++m : 0));
-			// if (end == 1)
-			// 	return ;
-			// printf("end = %zu\n", end);
 			i++;
 		}
 		write(1, "\n", 1);
