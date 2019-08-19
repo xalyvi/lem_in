@@ -12,13 +12,13 @@
 
 #include "lem_in.h"
 
-static t_node *inlist(t_node *list, t_node *node)
+static t_node	*inlist(t_node *list, t_node *node)
 {
 	node->next = list;
 	return (node);
 }
 
-t_node *unlist(t_node *prev, t_node *node, t_node **ls)
+t_node			*unlist(t_node *prev, t_node *node, t_node **ls)
 {
 	if (!prev)
 		*ls = node->next;
@@ -27,9 +27,10 @@ t_node *unlist(t_node *prev, t_node *node, t_node **ls)
 	return (node);
 }
 
-static void inner(t_links *links, t_node **node, t_node **prev, size_t i)
+static void		inner(t_links *links, t_node **node, t_node **prev, size_t i)
 {
-	if (links[(*node)->key].level == -1 || links[(*node)->key].level == links[i].level)
+	if (links[(*node)->key].level == -1
+	|| links[(*node)->key].level == links[i].level)
 	{
 		free(unlist(*prev, *node, &(links[i].input)));
 		if (*prev)
@@ -45,7 +46,8 @@ static void inner(t_links *links, t_node **node, t_node **prev, size_t i)
 	}
 	else if (links[i].level < links[(*node)->key].level)
 	{
-		links[i].output = inlist(links[i].output, unlist(*prev, *node, &(links[i].input)));
+		links[i].output = inlist(links[i].output,
+		unlist(*prev, *node, &(links[i].input)));
 		links[i].o++;
 		if (*prev)
 			*node = (*prev)->next;
@@ -54,7 +56,7 @@ static void inner(t_links *links, t_node **node, t_node **prev, size_t i)
 	}
 }
 
-static void input_output(t_lem_in *lem_in)
+static void		input_output(t_lem_in *lem_in)
 {
 	size_t i;
 	t_node *node;
@@ -74,10 +76,10 @@ static void input_output(t_lem_in *lem_in)
 	}
 }
 
-static int assign_levels(t_queue *q, t_lem_in *lem_in, size_t n)
+static int		assign_levels(t_queue *q, t_lem_in *lem_in, size_t n)
 {
-	int end;
-	t_node *node;
+	int		end;
+	t_node	*node;
 
 	end = 0;
 	node = lem_in->links[n].input;
@@ -95,11 +97,11 @@ static int assign_levels(t_queue *q, t_lem_in *lem_in, size_t n)
 	return (end);
 }
 
-int bfs(t_lem_in *lem_in)
+int				bfs(t_lem_in *lem_in)
 {
-	t_queue *q;
-	size_t n;
-	int rt;
+	t_queue	*q;
+	size_t	n;
+	int		rt;
 
 	q = create_queue();
 	enqueue(q, lem_in->start);

@@ -12,7 +12,7 @@
 
 #include "lem_in.h"
 
-int			ft_isnumbers(const char *str)
+int		ft_isnumbers(const char *str)
 {
 	size_t	i;
 
@@ -45,12 +45,12 @@ long	ft_atoi(const char *str)
 	return (nbr * sign);
 }
 
-void		ft_putchar(char c)
+void	ft_putchar(char c)
 {
 	write(1, &c, 1);
 }
 
-void		ft_putnbr(int nb)
+void	ft_putnbr(int nb)
 {
 	if (nb < 0)
 	{

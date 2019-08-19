@@ -34,7 +34,6 @@ int			check_coord(char const *line, int for_what)
 		else
 			return (1);
 	}
-
 }
 
 t_lem_in	*init_lem_in(char **line, t_room **node, t_room **prev)
@@ -82,7 +81,8 @@ int			check_room_er(t_room *room)
 		room = room->next;
 		while (room)
 		{
-			if (ft_strcmp(t->name, room->name) == 0 || (room->x == t->x && room->y == t->y))
+			if (ft_strcmp(t->name, room->name) == 0 ||
+			(room->x == t->x && room->y == t->y))
 				return (0);
 			room = room->next;
 		}
@@ -90,7 +90,8 @@ int			check_room_er(t_room *room)
 	return (1);
 }
 
-int			check_points(t_lem_in *lem_in, size_t count, char *line, t_room *room)
+int			check_points(t_lem_in *lem_in, size_t count,
+char *line, t_room *room)
 {
 	if (lem_in->flags != 3 || count < 2 || !line)
 		return (free_error(lem_in, room, line));

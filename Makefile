@@ -7,7 +7,6 @@ SRC = utils/get_line.c \
 	get_links.c \
 	get_rooms_support.c \
 	get_links_support.c \
-	solve_support.c \
 	bfs.c \
 	queue.c \
 	mapset.c \

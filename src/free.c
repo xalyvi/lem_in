@@ -12,7 +12,7 @@
 
 #include "lem_in.h"
 
-static void free_rooms(t_room **rooms, size_t size)
+static void	free_rooms(t_room **rooms, size_t size)
 {
 	size_t i;
 
@@ -29,7 +29,7 @@ static void free_rooms(t_room **rooms, size_t size)
 	free(rooms);
 }
 
-static void free_links(t_links *links, size_t size)
+static void	free_links(t_links *links, size_t size)
 {
 	size_t i;
 	t_node *t_link;
@@ -56,9 +56,9 @@ static void free_links(t_links *links, size_t size)
 	free(links);
 }
 
-static void free_path(t_paths **paths, size_t s)
+static void	free_path(t_paths **paths, size_t s)
 {
-	t_node *node;
+	t_node	*node;
 	t_node	*tmp;
 	size_t	i;
 
@@ -78,20 +78,21 @@ static void free_path(t_paths **paths, size_t s)
 	free(paths);
 }
 
-void		free_all(t_lem_in *lem_in, t_room *room, char *line, t_paths **paths)
+void		free_all(t_lem_in *lem_in, t_room *room,
+char *line, t_paths **paths)
 {
-	t_room *t_room;
+	t_room	*temp;
 
 	if (line)
 		free(line);
 	if (room)
 		while (room)
 		{
-			t_room = room->next;
+			temp = room->next;
 			if (room->name)
 				free(room->name);
 			free(room);
-			room = t_room;
+			room = temp;
 		}
 	if (paths)
 		free_path(paths, lem_in->links[lem_in->start].o);

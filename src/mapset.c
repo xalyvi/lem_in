@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mapset.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: srolland <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/08/19 21:05:43 by srolland          #+#    #+#             */
+/*   Updated: 2019/08/19 21:05:46 by srolland         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lem_in.h"
 
 static int	find_i_fork(t_links *links, size_t s, size_t p)
@@ -24,7 +36,7 @@ static int	find_i_fork(t_links *links, size_t s, size_t p)
 	return (0);
 }
 
-void	rotate_input_links(t_links *links, size_t s, size_t start)
+void		rotate_input_links(t_links *links, size_t s, size_t start)
 {
 	t_node	*node;
 
@@ -66,7 +78,7 @@ static void	delete_dead_links(t_links *links, size_t s, size_t p)
 	links[s].o--;
 }
 
-void	rotate_dead_links(t_links *links, size_t s, size_t p)
+void		rotate_dead_links(t_links *links, size_t s, size_t p)
 {
 	t_node	*node;
 
@@ -83,13 +95,13 @@ void	rotate_dead_links(t_links *links, size_t s, size_t p)
 	}
 }
 
-void	find_dead(t_links *links, size_t n, size_t start)
+void		find_dead(t_links *links, size_t n, size_t start)
 {
 	if (links[n].o == 0)
 		rotate_dead_links(links, n, start);
 }
 
-void	find_i(t_links *links, size_t n, size_t start)
+void		find_i(t_links *links, size_t n, size_t start)
 {
 	if (links[n].i > 1)
 		rotate_input_links(links, n, start);
@@ -114,11 +126,12 @@ static void	add_to_q(t_queue *q, t_links *links, char vis, size_t n)
 	}
 }
 
-void		iterate(t_links *links, size_t start, char vis, void (*function)(t_links *links, size_t n, size_t start))
+void		iterate(t_links *links, size_t start, char vis,
+void (*function)(t_links *links, size_t n, size_t start))
 {
 	size_t	n;
-
 	t_queue	*q;
+
 	q = create_queue();
 	enqueue(q, start);
 	while (!is_empty(q))

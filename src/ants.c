@@ -70,7 +70,8 @@ void			move_ants(t_lem_in *lem_in, t_paths **paths)
 		i = 0;
 		while (i < c)
 		{
-			end += move(paths[i], lem_in->rooms, ((lem_in->ants - m > algol(paths, i)) ? ++m : 0));
+			end += move(paths[i], lem_in->rooms,
+			((lem_in->ants - m > algol(paths, i)) ? ++m : 0));
 			i++;
 		}
 		write(1, "\n", 1);

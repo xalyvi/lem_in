@@ -23,7 +23,7 @@ static t_node	*cr_node(size_t key)
 	return (node);
 }
 
-static void	set_link(t_links *link, size_t key)
+static void		set_link(t_links *link, size_t key)
 {
 	t_node	*j;
 
@@ -46,7 +46,7 @@ static void	set_link(t_links *link, size_t key)
 	}
 }
 
-static int	find_graph(t_lem_in *lem_in, size_t	dash)
+static int		find_graph(t_lem_in *lem_in, size_t dash)
 {
 	size_t			i;
 	t_links			*j;
@@ -59,7 +59,8 @@ static int	find_graph(t_lem_in *lem_in, size_t	dash)
 	{
 		if (!j && ft_strncmp(lem_in->rooms[i]->name, lem_in->line, dash) == 0)
 			j = lem_in->links + i;
-		else if (!k && ft_strcmp(lem_in->rooms[i]->name, lem_in->line + dash + 1) == 0)
+		else if (!k && ft_strcmp(lem_in->rooms[i]->name,
+		lem_in->line + dash + 1) == 0)
 			k = lem_in->links + i;
 		else if (j && k)
 			break ;
@@ -72,7 +73,7 @@ static int	find_graph(t_lem_in *lem_in, size_t	dash)
 	return (1);
 }
 
-static int	get_names(t_lem_in *lem_in)
+static int		get_names(t_lem_in *lem_in)
 {
 	size_t	len1;
 	size_t	len2;
@@ -84,12 +85,13 @@ static int	get_names(t_lem_in *lem_in)
 	while (lem_in->line[len2] != '\0')
 		len2++;
 	len2 = len2 - len1 - 1;
-	if (ft_strncmp(lem_in->line, lem_in->line + len1 + 1, ((len1 > len2) ? len1 : len2)) == 0)
+	if (ft_strncmp(lem_in->line, lem_in->line + len1 + 1,
+	((len1 > len2) ? len1 : len2)) == 0)
 		return (0);
 	return (find_graph(lem_in, len1));
 }
 
-int			get_links(t_lem_in *lem_in)
+int				get_links(t_lem_in *lem_in)
 {
 	lem_in->links = init_links(lem_in->count);
 	if (!get_names(lem_in))
@@ -101,7 +103,9 @@ int			get_links(t_lem_in *lem_in)
 		if (lem_in->line[0] == '#')
 		{
 			if (lem_in->line[1] == '#')
-				return (free_error(lem_in, NULL, NULL));
+				if (ft_strcmp(lem_in->line, "##start") == 0 ||
+				ft_strcmp(lem_in->line, "##end") == 0)
+					return (free_error(lem_in, NULL, NULL));
 		}
 		else if (!get_names(lem_in))
 			return (free_error(lem_in, NULL, NULL));

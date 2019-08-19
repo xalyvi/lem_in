@@ -26,25 +26,26 @@ t_links			*init_links(size_t count)
 		links[i].o = 0;
 		links[i].input = NULL;
 		links[i].output = NULL;
+		links[i].vis = 0;
 		i++;
 	}
 	return (links);
 }
 
-static void		delete(t_links *links, size_t s, size_t p)
+static void		delete(t_links *links, size_t p)
 {
 	t_node	*node;
 	t_node	*prev;
 
 	prev = NULL;
-	node = links[s].output;
+	node = links->output;
 	while (node->key != p)
 	{
 		prev = node;
 		node = node->next;
 	}
-	unlist(prev, node, &(links[s].output));
-	links[s].o--;
+	free(unlist(prev, node, &(links->output)));
+	links->o--;
 }
 
 static void		free_node(t_node **node, t_node **prev, t_links *links)
@@ -87,13 +88,14 @@ static void		from_start(t_links *links, size_t n, size_t start, size_t m)
 			p = s;
 			s = links[s].input->key;
 		}
-		delete(links, s, p);
+		delete(links + s, p);
 		free_node(&node, &prev, links + n);
 		links[n].i--;
 	}
 }
 
-static int	find_start_or_if(t_links *links, size_t s, size_t p, size_t start, size_t *res)
+static int		find_start_or_if(t_links *links, size_t s,
+size_t p, size_t start, size_t *res)
 {
 	size_t	len;
 
@@ -109,11 +111,12 @@ static int	find_start_or_if(t_links *links, size_t s, size_t p, size_t start, si
 		*res = len;
 		return (0);
 	}
-	delete(links, s, p);
+	delete(links + s, p);
 	return (1);
 }
 
-void			delete_any_other(t_links *links, size_t n, size_t start, size_t len)
+void			delete_any_other(t_links *links, size_t n,
+size_t start, size_t len)
 {
 	size_t	m;
 	t_node	*node;

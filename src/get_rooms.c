@@ -74,30 +74,24 @@ static t_room	*inroom(t_room **prev, const char *line, size_t *count)
 	return (room);
 }
 
-static t_room	*get_start_end(char **line, t_lem_in *lem_in,
-		size_t *count, t_room **prev)
+static int		look_up(char *line, t_lem_in *lem_in,
+		size_t count)
 {
-
-	if (ft_strcmp(*line, "##start") == 0)
+	if (ft_strcmp(line, "##start") == 0)
 	{
 		if (!(lem_in->flags & 1) && (lem_in->flags |= 1))
-			lem_in->start = *count;
+			lem_in->start = count;
 		else
-			return (NULL);
+			return (1);
 	}
-	else if (ft_strcmp(*line, "##end") == 0)
+	else if (ft_strcmp(line, "##end") == 0)
 	{
 		if (!(lem_in->flags & 2) && (lem_in->flags |= 2))
-			lem_in->end = *count;
+			lem_in->end = count;
 		else
-			return (NULL);
+			return (1);
 	}
-	else
-		return (NULL);
-	free(*line);
-	if (!(*line = skip_comments()))
-		return (NULL);
-	return (inroom(prev, *line, count));
+	return (0);
 }
 
 t_lem_in		*get_rooms(size_t count)
@@ -116,7 +110,7 @@ t_lem_in		*get_rooms(size_t count)
 			break ;
 		if (line[0] == '#')
 		{
-			if (line[1] == '#' && !(node = get_start_end(&line, lem_in, &count, &prev)))
+			if (line[1] == '#' && look_up(line, lem_in, count))
 				return ((!free_error(lem_in, prev, line)) ? NULL : NULL);
 		}
 		else if (!(node = inroom(&prev, line, &count)))

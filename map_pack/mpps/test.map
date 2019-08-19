@@ -1,6 +1,22 @@
+#comment
+#comment\
+##comment
+###comment
 5
+#comment
+#comment\
+##comment
+###comment
 ##start
+#comment
+#comment\
+##comment
+###comment
 room_0 0 0
+#comment
+#comment\
+##comment
+###comment
 room_1 1 1
 room_2 2 2
 room_3 3 3
@@ -9,13 +25,20 @@ room_5 5 5
 room_6 6 6
 room_7 7 7
 room_8 8 8
+#comment
+#comment\
+##comment
+###comment
 ##end
+#comment
+#comment\
+##comment
+###comment
 room_9 9 9
 room_10 10 10
 room_11 11 11
 room_12 12 12
 room_13 13 13
-room_0-room_0
 room_0-room_1
 room_2-room_0
 room_4-room_1
