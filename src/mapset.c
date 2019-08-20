@@ -12,40 +12,19 @@
 
 #include "lem_in.h"
 
-static int	find_i_fork(t_links *links, size_t s, size_t p)
-{
-	t_node	*node;
-	t_node	*prev;
-
-	while (links[s].o == 1 && links[s].i > 0)
-	{
-		p = s;
-		s = links[s].input->key;
-		if (links[s].level == 0)
-			return (1);
-	}
-	node = links[s].output;
-	prev = NULL;
-	while (node->key != p)
-	{
-		prev = node;
-		node = node->next;
-	}
-	free(unlist(prev, node, &(links[s].output)));
-	links[s].o--;
-	return (0);
-}
-
 void		rotate_input_links(t_links *links, size_t s, size_t start)
 {
 	t_node	*node;
+	t_xy	sp;
 
 	node = links[s].input;
 	while (node)
 	{
 		if (find_i_fork(links, node->key, s))
 		{
-			delete_any_other(links, s, start, 0);
+			sp.p = s;
+			sp.start = start;
+			delete_any_other(links, sp, 0);
 			return ;
 		}
 		else
@@ -93,18 +72,6 @@ void		rotate_dead_links(t_links *links, size_t s, size_t p)
 		rotate_dead_links(links, node->key, s);
 		node = node->next;
 	}
-}
-
-void		find_dead(t_links *links, size_t n, size_t start)
-{
-	if (links[n].o == 0)
-		rotate_dead_links(links, n, start);
-}
-
-void		find_i(t_links *links, size_t n, size_t start)
-{
-	if (links[n].i > 1)
-		rotate_input_links(links, n, start);
 }
 
 static void	add_to_q(t_queue *q, t_links *links, char vis, size_t n)

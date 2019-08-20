@@ -35,3 +35,27 @@ void	*skip_comments(void)
 	ft_putendl(line);
 	return (line);
 }
+
+int		find_i_fork(t_links *links, size_t s, size_t p)
+{
+	t_node	*node;
+	t_node	*prev;
+
+	while (links[s].o == 1 && links[s].i > 0)
+	{
+		p = s;
+		s = links[s].input->key;
+		if (links[s].level == 0)
+			return (1);
+	}
+	node = links[s].output;
+	prev = NULL;
+	while (node->key != p)
+	{
+		prev = node;
+		node = node->next;
+	}
+	free(unlist(prev, node, &(links[s].output)));
+	links[s].o--;
+	return (0);
+}

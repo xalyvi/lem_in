@@ -50,15 +50,6 @@ static void	delete_others(t_links *links, size_t key, t_node *save)
 	}
 }
 
-void		compare_to_in(size_t cur, size_t *len, t_node *temp, t_node **node)
-{
-	if (cur < *len)
-	{
-		*len = cur;
-		*node = temp;
-	}
-}
-
 void		find_o(t_links *links, size_t n)
 {
 	t_node *node;

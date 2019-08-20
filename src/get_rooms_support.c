@@ -48,6 +48,7 @@ t_lem_in	*init_lem_in(char **line, t_room **node, t_room **prev)
 	lem_in->line = NULL;
 	lem_in->links = NULL;
 	lem_in->rooms = NULL;
+	lem_in->paths = NULL;
 	*line = NULL;
 	*node = NULL;
 	*prev = NULL;

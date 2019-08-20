@@ -18,15 +18,6 @@ static t_node	*inlist(t_node *list, t_node *node)
 	return (node);
 }
 
-t_node			*unlist(t_node *prev, t_node *node, t_node **ls)
-{
-	if (!prev)
-		*ls = node->next;
-	else
-		prev->next = node->next;
-	return (node);
-}
-
 static void		inner(t_links *links, t_node **node, t_node **prev, size_t i)
 {
 	if (links[(*node)->key].level == -1

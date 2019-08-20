@@ -27,52 +27,68 @@ static size_t	algol(t_paths **paths, size_t c)
 	return (sum);
 }
 
-static size_t	move(t_paths *p, t_room **rooms, size_t m)
+static void		print_ant(size_t ant, char *room)
+{
+	write(1, "L", 1);
+	ft_putnbr(ant);
+	write(1, "-", 1);
+	ft_putstr(room);
+}
+
+static void		place_ant(t_node *node, size_t m)
+{
+	if (node->next)
+		node->ant = node->next->ant;
+	else
+		node->ant = m;
+}
+
+static char		move(t_lem_in *lem_in, t_xy *sp, size_t m, char rp)
 {
 	t_node	*node;
-	size_t	rt;
+	int		pr;
+	char	rt;
 
 	rt = 0;
-	node = p->path;
+	node = lem_in->paths[sp->p]->path;
 	if ((m > 0 && !(node->next)) || (node->next && node->next->ant > 0))
-		rt++;
+		sp->start++;
+	pr = 0;
 	while (node)
 	{
-		if (node->next)
-			node->ant = node->next->ant;
-		else
-			node->ant = m;
+		place_ant(node, m);
 		if (node->ant > 0)
 		{
-			write(1, "L", 1);
-			ft_putnbr(node->ant);
-			write(1, "-", 1);
-			ft_putstr(rooms[node->key]->name);
-			write(1, " ", 1);
+			if (pr || rp)
+				write(1, " ", 1);
+			rt = 1;
+			print_ant(node->ant, lem_in->rooms[node->key]->name);
+			pr = 1;
 		}
 		node = node->next;
 	}
 	return (rt);
 }
 
-void			move_ants(t_lem_in *lem_in, t_paths **paths)
+void			move_ants(t_lem_in *lem_in)
 {
 	size_t	c;
-	size_t	i;
 	size_t	m;
-	size_t	end;
+	t_xy	sp;
+	char	pr;
 
 	c = lem_in->links[lem_in->start].o;
 	m = 0;
-	end = 0;
-	while (end < lem_in->ants)
+	sp.start = 0;
+	while (sp.start < lem_in->ants)
 	{
-		i = 0;
-		while (i < c)
+		sp.p = 0;
+		pr = 0;
+		while (sp.p < c)
 		{
-			end += move(paths[i], lem_in->rooms,
-			((lem_in->ants - m > algol(paths, i)) ? ++m : 0));
-			i++;
+			pr = move(lem_in, &(sp),
+			((lem_in->ants - m > algol(lem_in->paths, sp.p)) ? ++m : 0), pr);
+			sp.p++;
 		}
 		write(1, "\n", 1);
 	}

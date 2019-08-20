@@ -13,24 +13,8 @@
 #include "lem_in.h"
 
 /*
-**	TODO: '\n' at the end of lines
-**	TODO: norminette
 **	TODO: author file
 **	TODO: strerror() and perror()
-**
-**	maps to check:
-**
-**	mpps/maps/illegalname1
-**
-**	@(bad path trimming)
-**	/mpps/maps3/subject_map
-**	/test/test1
-**	/test/test7
-**	test_ing/maps/in0
-**	test_ing/maps/input1
-**	test_ing/maps/map42
-**
-**	Solution: it's all random! :)
 */
 
 static char	*read_ants_number(void)
@@ -48,7 +32,6 @@ static char	*read_ants_number(void)
 int			main(void)
 {
 	char		*line;
-	t_paths		**paths;
 	size_t		ants;
 	t_lem_in	*lem_in;
 
@@ -67,9 +50,9 @@ int			main(void)
 		return (0);
 	if (!bfs(lem_in))
 		return (0);
-	paths = make_paths(lem_in->links, lem_in->start);
+	lem_in->paths = make_paths(lem_in->links, lem_in->start);
 	write(1, "\n", 1);
-	move_ants(lem_in, paths);
-	free_all(lem_in, NULL, NULL, paths);
+	move_ants(lem_in);
+	free_all(lem_in, NULL, NULL, lem_in->paths);
 	return (0);
 }
