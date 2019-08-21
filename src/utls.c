@@ -32,7 +32,8 @@ void	*skip_comments(void)
 		free(line);
 		line = NULL;
 	}
-	ft_putendl(line);
+	if (line)
+		ft_putendl(line);
 	return (line);
 }
 

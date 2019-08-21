@@ -16,7 +16,7 @@ static int		read_from_fd(char **line)
 {
 	int		ret;
 	char	*tmp;
-	char	buf[2];
+	char	buf[20];
 
 	while ((ret = read(0, buf, 1)))
 	{
@@ -33,7 +33,7 @@ static int		read_from_fd(char **line)
 
 int				get_line(char **line)
 {
-	char			buf[2];
+	char			buf[20];
 	int				ret;
 	char			*temp;
 	char			*n;

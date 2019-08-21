@@ -12,11 +12,6 @@
 
 #include "lem_in.h"
 
-/*
-**	TODO: author file
-**	TODO: strerror() and perror()
-*/
-
 static char	*read_ants_number(void)
 {
 	char	*line;
@@ -38,18 +33,18 @@ int			main(void)
 	ants = 0;
 	line = NULL;
 	if (!(line = read_ants_number()))
-		return (0);
+		return (1);
 	ants = ft_atoi(line);
 	if (ants > 2147483647)
-		return (free_error(NULL, NULL, NULL));
+		return (!free_error(NULL, NULL, line));
 	free(line);
 	if (!(lem_in = get_rooms(0)))
-		return (0);
+		return (1);
 	lem_in->ants = ants;
 	if (!get_links(lem_in))
-		return (0);
+		return (1);
 	if (!bfs(lem_in))
-		return (0);
+		return (1);
 	lem_in->paths = make_paths(lem_in->links, lem_in->start);
 	write(1, "\n", 1);
 	move_ants(lem_in);
